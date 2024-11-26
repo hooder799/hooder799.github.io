@@ -40,9 +40,11 @@ function showUserInfo(user) {
 
 // Handle Signup
 document.getElementById('signupBtn').addEventListener('click', async () => {
+  const username = document.getElementById('signupUsername').value;
   const email = document.getElementById('signupEmail').value;
   const password = document.getElementById('signupPassword').value;
 
+  // Sign up the user with email and password
   const { user, error } = await supabase.auth.signUp({
     email,
     password
@@ -51,8 +53,19 @@ document.getElementById('signupBtn').addEventListener('click', async () => {
   if (error) {
     alert(error.message);
   } else {
-    alert('Signup successful! Please check your email for a verification link.');
-    showLoginForm();
+    // If signup is successful, update user profile with username
+    const { data, error: profileError } = await supabase
+      .from('profiles')
+      .upsert([
+        { id: user.id, username: username, email: email }
+      ], { onConflict: ['id'] }); // Ensures we don't duplicate the record
+
+    if (profileError) {
+      alert('Error saving username: ' + profileError.message);
+    } else {
+      alert('Signup successful! Please check your email for a verification link.');
+      showLoginForm();
+    }
   }
 });
 
