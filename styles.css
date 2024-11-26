@@ -126,3 +126,14 @@ footer {
   font-size: 14px;
   color: #aaa;
 }
+
+.auth-form input, .auth-form button {
+  transition: all 0.3s ease;
+}
+
+body {
+  background-image: url('background-image.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
