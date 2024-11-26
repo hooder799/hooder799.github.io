@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lego Brix</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; }
+        .welcome { font-size: 2em; }
+        .currency { font-size: 1.5em; color: #007bff; }
+    </style>
+</head>
+<body>
+
+    <h1 class="welcome">Welcome to Lego Brix</h1>
+    <p id="greeting"></p>
+    <p class="currency">Your balance: <span id="currency">Brix 0</span></p>
+
+    <script>
+        const supabaseUrl = 'https://your-project.supabase.co';
+        const supabaseKey = 'your-anon-key';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Get current user
+        const user = supabase.auth.user();
+
+        if (user) {
+            document.getElementById('greeting').innerText = `Hello, ${user.email}!`;
+            document.getElementById('currency').innerText = 'Brix 1000';  // Example balance
+        } else {
+            window.location.href = 'login.html';  // Redirect to login if not logged in
+        }
+    </script>
+</body>
+</html>
