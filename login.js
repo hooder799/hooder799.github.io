@@ -1,6 +1,6 @@
 // Initialize Auth0 client
 const auth0 = new Auth0Client({
-  domain: 'YOUR_AUTH0_DOMAIN',
+  domain: 'dev-1npm001fd35mvxyz.us.auth0.com',
   client_id: 'YOUR_AUTH0_CLIENT_ID',
   redirect_uri: window.location.href
 });
