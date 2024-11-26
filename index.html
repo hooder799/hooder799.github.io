@@ -1,1 +1,52 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.6/dist/umd/supabase.js"></script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supabase Auth System</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to Supabase Auth System</h1>
+
+    <!-- Signup Form -->
+    <div id="signupForm">
+      <h2>Create an Account</h2>
+      <input type="email" id="signupEmail" placeholder="Email" required />
+      <input type="password" id="signupPassword" placeholder="Password" required />
+      <button id="signupBtn">Sign Up</button>
+      <p>Already have an account? <a href="#" onclick="showLoginForm()">Login</a></p>
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginForm" style="display: none;">
+      <h2>Login</h2>
+      <input type="email" id="loginEmail" placeholder="Email" required />
+      <input type="password" id="loginPassword" placeholder="Password" required />
+      <button id="loginBtn">Login</button>
+      <p>Forgot password? <a href="#" onclick="showResetForm()">Reset Password</a></p>
+      <p>Don't have an account? <a href="#" onclick="showSignupForm()">Sign Up</a></p>
+    </div>
+
+    <!-- Reset Password Form -->
+    <div id="resetForm" style="display: none;">
+      <h2>Reset Password</h2>
+      <input type="email" id="resetEmail" placeholder="Enter your email" required />
+      <button id="resetBtn">Send Reset Link</button>
+      <p>Remember your password? <a href="#" onclick="showLoginForm()">Login</a></p>
+    </div>
+
+    <!-- User Info (after login) -->
+    <div id="userInfo" style="display: none;">
+      <h2>Welcome, <span id="userEmail"></span></h2>
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.6/dist/umd/supabase.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
