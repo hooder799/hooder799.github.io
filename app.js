@@ -1,4 +1,9 @@
 // Initialize Supabase
+//https://mcqaszdqkhcoxssnrkjc.supabase.co';  // Replace with your Supabase URL
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jcWFzemRxa2hjb3hzc25ya2pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI2NDM0ODUsImV4cCI6MjA0ODIxOTQ4NX0.froiSNlLIpJrmFMlouzqN8TjtEOaLQkm1DiXaEqkAKI';  // Replace with your Supabase anon key
+
+
+// Initialize Supabase
 const supabaseUrl = 'https://mcqaszdqkhcoxssnrkjc.supabase.co';  // Replace with your Supabase URL
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jcWFzemRxa2hjb3hzc25ya2pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI2NDM0ODUsImV4cCI6MjA0ODIxOTQ4NX0.froiSNlLIpJrmFMlouzqN8TjtEOaLQkm1DiXaEqkAKI';  // Replace with your Supabase anon key
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
@@ -37,12 +42,12 @@ function showUserInfo(user) {
 document.getElementById('signupBtn').addEventListener('click', async () => {
   const email = document.getElementById('signupEmail').value;
   const password = document.getElementById('signupPassword').value;
-  
+
   const { user, error } = await supabase.auth.signUp({
     email,
     password
   });
-  
+
   if (error) {
     alert(error.message);
   } else {
@@ -55,12 +60,12 @@ document.getElementById('signupBtn').addEventListener('click', async () => {
 document.getElementById('loginBtn').addEventListener('click', async () => {
   const email = document.getElementById('loginEmail').value;
   const password = document.getElementById('loginPassword').value;
-  
+
   const { user, error } = await supabase.auth.signInWithPassword({
     email,
     password
   });
-  
+
   if (error) {
     alert(error.message);
   } else {
@@ -71,9 +76,9 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
 // Handle Password Reset
 document.getElementById('resetBtn').addEventListener('click', async () => {
   const email = document.getElementById('resetEmail').value;
-  
+
   const { data, error } = await supabase.auth.resetPasswordForEmail(email);
-  
+
   if (error) {
     alert(error.message);
   } else {
@@ -91,7 +96,7 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
 // Check if user is logged in on page load
 document.addEventListener('DOMContentLoaded', async () => {
   const user = supabase.auth.user();
-  
+
   if (user) {
     showUserInfo(user);
   } else {
