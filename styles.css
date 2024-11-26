@@ -1,45 +1,128 @@
-body {
-  font-family: Arial, sans-serif;
+/* Global Styles */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-.navbar {
-  background-color: #333;
-  color: white;
-  padding: 1em;
-  text-align: center;
-}
-
-.navbar ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.navbar ul li {
-  display: inline;
-  margin: 0 10px;
-}
-
-.navbar ul li a {
-  color: white;
-  text-decoration: none;
-}
-
-.hero {
-  background-color: #f3f3f3;
-  padding: 50px;
-  text-align: center;
-}
-
-.featured-games .games {
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f1f1f1;
+  color: #333;
+  line-height: 1.6;
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+}
+
+header {
+  background-color: #222;
+  padding: 15px 0;
+  text-align: center;
+}
+
+header .logo img {
+  width: 150px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+nav ul li {
+  display: inline;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav ul li a:hover {
+  text-decoration: underline;
 }
 
 footer {
-  background-color: #333;
-  color: white;
   text-align: center;
   padding: 10px;
+  background-color: #222;
+  color: #fff;
+}
+
+/* Auth Form Styles */
+.auth-form {
+  max-width: 400px;
+  margin: 50px auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.auth-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.auth-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-form label {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.auth-form input {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.auth-form input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.auth-form button {
+  background-color: #007bff;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.auth-form button:hover {
+  background-color: #0056b3;
+}
+
+.auth-form p {
+  text-align: center;
+}
+
+.auth-form p a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.auth-form p a:hover {
+  text-decoration: underline;
+}
+
+/* Footer Styles */
+footer {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #aaa;
 }
