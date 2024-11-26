@@ -1,1 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Roblox Clone</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="logo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/06/Roblox_Logo_2020.png" alt="Roblox Logo">
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="game-studio.html">Game Studio</a></li>
+        <li><a href="avatar.html">Avatar</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="signup.html">Sign Up</a></li>
+      </ul>
+    </nav>
+  </header>
 
+  <!-- Sign Up Form -->
+  <section class="auth-form">
+    <h2>Create Your Account</h2>
+    <form id="signupForm">
+      <!-- Username -->
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required placeholder="Enter your username">
+
+      <!-- Email -->
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required placeholder="Enter your email">
+
+      <!-- Password -->
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required placeholder="Enter your password">
+
+      <!-- Confirm Password -->
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
+
+      <!-- Submit Button -->
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <p>Already have an account? <a href="login.html">Log in here</a></p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 Roblox Clone. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    // Simple form validation (can be extended)
+    document.getElementById('signupForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Collect form data
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      // Simple client-side validation
+      if (password !== confirmPassword) {
+        alert('Passwords do not match.');
+        return;
+      }
+
+      // Normally here, you would send the data to your backend (e.g., Firebase or Node.js)
+
+      alert(`Account created successfully for ${username}!`);
+      // Redirect to login page (or another page)
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>
