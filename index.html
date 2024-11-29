@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IXL.com - Login</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to the CSS file -->
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login to IXL.com</h1>
+        <form id="login-form" method="POST">
+            <div class="input-group">
+                <label for="email">Email or Username</label>
+                <input type="text" id="email" name="email" placeholder="Email or Username" required />
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Password" required />
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <div class="signup-link">
+            <p>Need an account? <a href="/signup">Sign up</a></p>
+        </div>
+    </div>
+    <script src="login.js"></script> <!-- JavaScript for login logic -->
+</body>
+</html>
