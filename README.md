@@ -1,2 +1,1 @@
-# hooder799.github.io
-website
+discord.com remake
