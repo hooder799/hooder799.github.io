@@ -1,14 +1,14 @@
-// Helper function to check if the user is logged in
+// Check if the user is logged in
 function checkLoginStatus() {
-    const user = localStorage.getItem("user");
+    const user = JSON.parse(localStorage.getItem("loggedIn"));
     if (!user) {
         window.location.href = "login.html";
     }
 }
 
-// Redirect to the main page if the user is already logged in
+// Redirect to the main page if already logged in
 function redirectToMainPage() {
-    const user = localStorage.getItem("user");
+    const user = JSON.parse(localStorage.getItem("loggedIn"));
     if (user) {
         window.location.href = "index.html";
     }
@@ -21,10 +21,11 @@ document.getElementById("login-form")?.addEventListener("submit", function(e) {
     const email = document.getElementById("login-email").value;
     const password = document.getElementById("login-password").value;
 
+    // Simulate login by checking localStorage
     const user = JSON.parse(localStorage.getItem("user"));
-    if (user && user.email === email && user.password === password) {
+    if (user && (user.email === email || user.username === email) && user.password === password) {
         localStorage.setItem("loggedIn", JSON.stringify(user));
-        window.location.href = "index.html";
+        window.location.href = "index.html";  // Redirect to the main page
     } else {
         alert("Incorrect credentials. Please try again.");
     }
@@ -38,7 +39,7 @@ document.getElementById("signup-form")?.addEventListener("submit", function(e) {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    // Check if email already exists
+    // Check if the email already exists
     const existingUser = JSON.parse(localStorage.getItem("user"));
     if (existingUser && existingUser.email === email) {
         alert("User already exists. Please login.");
@@ -51,7 +52,7 @@ document.getElementById("signup-form")?.addEventListener("submit", function(e) {
         };
         localStorage.setItem("user", JSON.stringify(newUser));
         alert("Account created successfully! Redirecting to login...");
-        window.location.href = "login.html";
+        window.location.href = "login.html";  // Redirect to login page
     }
 });
 
@@ -62,20 +63,21 @@ document.getElementById("recovery-form")?.addEventListener("submit", function(e)
     const email = document.getElementById("recovery-email").value;
     const user = JSON.parse(localStorage.getItem("user"));
 
+    // Simulate password recovery
     if (user && user.email === email) {
         alert("A password reset link has been sent to your email (simulated).");
-        window.location.href = "login.html";
+        window.location.href = "login.html";  // Redirect to login page
     } else {
         alert("No account found with that email.");
     }
 });
 
-// Check if the user is already logged in and redirect to main page
-if (window.location.pathname === "/login.html" || window.location.pathname === "/signup.html") {
-    redirectToMainPage();
-}
-
 // Ensure the user is logged in on the main page
 if (window.location.pathname === "/index.html") {
     checkLoginStatus();
+}
+
+// Redirect to the main page if already logged in
+if (window.location.pathname === "/login.html" || window.location.pathname === "/signup.html") {
+    redirectToMainPage();
 }
