@@ -36,29 +36,30 @@ function logout() {
     localStorage.removeItem("loggedInUser");
 }
 
+// Sign-up page logic
 document.getElementById("signup-form")?.addEventListener("submit", function (e) {
     e.preventDefault();
     const email = document.getElementById("email").value;
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    // Save user data
     saveUserData(email, username, password);
-
     alert("Account created successfully!");
     window.location.href = "login.html"; // Redirect to login page after successful sign up
 });
 
-// Check if the user is already logged in. If yes, redirect them to the main chat page
+// Login page logic
 window.onload = function () {
     const loggedInUser = getLoggedInUser();
+
+    // Redirect to main page if already logged in
     if (loggedInUser) {
-        window.location.href = "index.html"; // If user is logged in, go to main page
+        window.location.href = "index.html";
     }
 
+    // Handle login form submission
     document.getElementById("login-form")?.addEventListener("submit", function (e) {
         e.preventDefault();
-
         const emailOrUsername = document.getElementById("login-email").value;
         const password = document.getElementById("login-password").value;
 
@@ -73,52 +74,62 @@ window.onload = function () {
     });
 };
 
+// Main Chat Page (index.html) logic
+
 // Ensure the user is logged in before accessing the chat page
-window.onload = function () {
-    const loggedInUser = getLoggedInUser();
-    if (!loggedInUser) {
-        window.location.href = "login.html"; // Redirect to login page if not logged in
-    } else {
-        displayMessages(); // Display messages if the user is logged in
-    }
-
-    // Display messages in the chat
-    function displayMessages() {
-        const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
-        const chatMessagesDiv = document.getElementById("chat-messages");
-        chatMessagesDiv.innerHTML = "";
-
-        messages.forEach(message => {
-            const messageElement = document.createElement("div");
-            messageElement.classList.add("message");
-            messageElement.textContent = `${message.username}: ${message.text}`;
-            chatMessagesDiv.appendChild(messageElement);
-        });
-    }
-
-    // Handle message sending
-    document.getElementById("send-message")?.addEventListener("click", function () {
-        const messageInput = document.getElementById("message-input");
-        const messageText = messageInput.value.trim();
-
-        if (messageText === "") return;
-
+if (document.getElementById("chat-messages")) {
+    window.onload = function () {
         const loggedInUser = getLoggedInUser();
         if (!loggedInUser) {
-            window.location.href = "login.html"; // Redirect if not logged in
-            return;
+            window.location.href = "login.html"; // Redirect to login page if not logged in
+        } else {
+            displayMessages(); // Display messages if the user is logged in
         }
 
-        const newMessage = {
-            username: loggedInUser.username,
-            text: messageText
-        };
+        // Display messages in the chat
+        function displayMessages() {
+            const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+            const chatMessagesDiv = document.getElementById("chat-messages");
+            chatMessagesDiv.innerHTML = "";
 
-        const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
-        messages.push(newMessage);
-        localStorage.setItem("chatMessages", JSON.stringify(messages));
+            messages.forEach(message => {
+                const messageElement = document.createElement("div");
+                messageElement.classList.add("message");
+                messageElement.textContent = `${message.username}: ${message.text}`;
+                chatMessagesDiv.appendChild(messageElement);
+            });
+        }
 
-        messageInput.value = "";
-        displayMessages();
-    });
-};
+        // Handle message sending
+        document.getElementById("send-message")?.addEventListener("click", function () {
+            const messageInput = document.getElementById("message-input");
+            const messageText = messageInput.value.trim();
+
+            if (messageText === "") return;
+
+            const loggedInUser = getLoggedInUser();
+            if (!loggedInUser) {
+                window.location.href = "login.html"; // Redirect if not logged in
+                return;
+            }
+
+            const newMessage = {
+                username: loggedInUser.username,
+                text: messageText
+            };
+
+            const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+            messages.push(newMessage);
+            localStorage.setItem("chatMessages", JSON.stringify(messages));
+
+            messageInput.value = "";
+            displayMessages();
+        });
+    };
+}
+
+// Logout functionality
+document.getElementById("logout-button")?.addEventListener("click", function () {
+    logout();
+    window.location.href = "login.html"; // Redirect to login page after logout
+});
