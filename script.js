@@ -1,28 +1,50 @@
-// Check if the user is logged in, and retrieve their username
-function checkLoginStatus() {
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedIn"));
-    if (!loggedInUser) {
-        window.location.href = "login.html"; // Redirect to login page if not logged in
+// Sign-up: Store user details in localStorage
+document.getElementById("signup-form")?.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    const newUser = { email, username, password };
+    localStorage.setItem("user", JSON.stringify(newUser));
+
+    alert("Account created successfully!");
+    window.location.href = "login.html"; // Redirect to login page
+});
+
+// Login: Check credentials from localStorage
+document.getElementById("login-form")?.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const emailOrUsername = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
+
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    if (storedUser && (storedUser.email === emailOrUsername || storedUser.username === emailOrUsername) && storedUser.password === password) {
+        localStorage.setItem("loggedIn", JSON.stringify(storedUser));
+        window.location.href = "index.html"; // Redirect to main page
+    } else {
+        alert("Invalid credentials, please try again.");
     }
-    return loggedInUser;
+});
+
+// Load messages from localStorage
+function loadMessages() {
+    return JSON.parse(localStorage.getItem("chatMessages")) || [];
 }
 
-// Save messages in localStorage
+// Save messages to localStorage
 function saveMessages(messages) {
     localStorage.setItem("chatMessages", JSON.stringify(messages));
 }
 
-// Load messages from localStorage
-function loadMessages() {
-    const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
-    return messages;
-}
-
-// Display messages in the chat window
+// Display messages in chat
 function displayMessages() {
     const messages = loadMessages();
     const chatMessagesDiv = document.getElementById("chat-messages");
-    chatMessagesDiv.innerHTML = ""; // Clear current messages
+    chatMessagesDiv.innerHTML = "";
 
     messages.forEach(message => {
         const messageElement = document.createElement("div");
@@ -32,42 +54,35 @@ function displayMessages() {
     });
 }
 
-// Handle message send action
+// Send message
 document.getElementById("send-message")?.addEventListener("click", function() {
     const messageInput = document.getElementById("message-input");
     const messageText = messageInput.value.trim();
 
-    if (messageText === "") {
-        return; // Don't send empty messages
+    if (messageText === "") return;
+
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedIn"));
+    if (!loggedInUser) {
+        alert("Please log in first.");
+        window.location.href = "login.html";
+        return;
     }
 
-    const loggedInUser = checkLoginStatus(); // Get logged-in user data
-    const username = loggedInUser.username; // Username of the logged-in user
-
-    // Create a new message object
-    const newMessage = {
-        username: username,
-        text: messageText
-    };
-
-    // Load existing messages from localStorage
+    const newMessage = { username: loggedInUser.username, text: messageText };
     const messages = loadMessages();
-
-    // Add the new message to the list
     messages.push(newMessage);
-
-    // Save updated messages back to localStorage
     saveMessages(messages);
 
-    // Clear the input field
     messageInput.value = "";
-
-    // Display updated messages in the chat
     displayMessages();
 });
 
-// Load messages when the page loads
+// Load messages on page load
 window.onload = function() {
-    checkLoginStatus(); // Ensure the user is logged in
-    displayMessages(); // Display messages from localStorage
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedIn"));
+    if (!loggedInUser) {
+        window.location.href = "login.html"; // Redirect to login page if not logged in
+    } else {
+        displayMessages(); // Show saved messages
+    }
 };
