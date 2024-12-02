@@ -48,3 +48,27 @@ document.getElementById("signup-form")?.addEventListener("submit", function (e) 
     alert("Account created successfully!");
     window.location.href = "login.html"; // Redirect to login page after successful sign up
 });
+
+// Check if the user is already logged in. If yes, redirect them to the main chat page
+window.onload = function () {
+    const loggedInUser = getLoggedInUser();
+    if (loggedInUser) {
+        window.location.href = "index.html"; // If user is logged in, go to main page
+    }
+
+    document.getElementById("login-form")?.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const emailOrUsername = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+
+        const loggedInUser = getUserData(emailOrUsername, password);
+
+        if (loggedInUser) {
+            storeLoggedInUser(loggedInUser);
+            window.location.href = "index.html"; // Redirect to main page after login
+        } else {
+            alert("Invalid credentials, please try again.");
+        }
+    });
+};
