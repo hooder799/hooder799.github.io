@@ -1,34 +1,119 @@
+/* Global Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #2f3136;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: #36393f;
     color: white;
     display: flex;
-    justify-content: center;
+}
+
+h1, h2 {
+    font-weight: bold;
+}
+
+/* Container */
+.container {
+    padding: 10px;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #2f3136;
+    padding: 20px;
+    border-right: 1px solid #444;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h2 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.sidebar button {
+    background-color: #7289da;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    border: none;
+    cursor: pointer;
+}
+
+.sidebar button:hover {
+    background-color: #5a6cb0;
+}
+
+/* Chat Area */
+.chat-container {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    height: 100vh;
+}
+
+.chat-header h2 {
+    font-size: 20px;
     margin: 0;
 }
 
-.container {
-    width: 300px;
-    padding: 20px;
-    background-color: #202225;
-    border-radius: 8px;
+.chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-top: 20px;
+    padding-right: 20px;
 }
 
-input {
-    width: 100%;
+.message {
+    background-color: #40444b;
     padding: 10px;
-    margin: 10px 0;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.message.user {
+    background-color: #7289da;
+}
+
+input[type="text"], textarea {
+    background-color: #2f3136;
+    border: 1px solid #444;
+    color: white;
+    padding: 10px;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    width: 100%;
 }
 
 button {
-    width: 100%;
-    padding: 10px;
+    padding: 10px 15px;
     background-color: #7289da;
     border: none;
     color: white;
     border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #5a6cb0;
+}
+
+/* Emoji Picker */
+.emoji-picker {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.emoji-picker img {
+    width: 30px;
+    cursor: pointer;
+    margin-right: 5px;
 }
