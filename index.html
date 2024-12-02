@@ -10,19 +10,34 @@
     <div class="sidebar">
         <h2>Servers</h2>
         <button>Add Server</button>
-        <div id="server-list"></div>
+        <div id="server-list">
+            <!-- List of servers will go here -->
+        </div>
         <h2>Friends</h2>
         <button>Add Friend</button>
-        <div id="friend-list"></div>
+        <div id="friend-list">
+            <!-- List of friends will go here -->
+        </div>
     </div>
 
     <div class="chat-container">
-        <div id="chat-area">
-            <div class="message">Hello, how are you?</div>
-            <div class="message">I’m good! How about you?</div>
+        <div class="chat-header">
+            <h2>Chat Room</h2>
+            <button id="settings-button">Settings</button>
         </div>
-        <textarea id="message-input" placeholder="Type your message"></textarea>
+
+        <div class="chat-messages" id="chat-messages">
+            <!-- Messages will appear here -->
+        </div>
+
+        <textarea id="message-input" placeholder="Type a message..." rows="3"></textarea>
         <button id="send-message">Send</button>
+
+        <div class="emoji-picker" id="emoji-picker">
+            <!-- Emoji Picker -->
+            <img src="assets/images/emoji.png" alt="Emoji" title="😊">
+            <!-- Add more emoji images as needed -->
+        </div>
     </div>
 
     <script src="script.js"></script>
