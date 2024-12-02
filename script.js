@@ -48,3 +48,18 @@ document.getElementById("signup-form")?.addEventListener("submit", function (e) 
     window.location.href = "login.html"; // Redirect to login page
 });
 
+document.getElementById("login-form")?.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const emailOrUsername = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
+
+    const loggedInUser = getUserData(emailOrUsername, password);
+
+    if (loggedInUser) {
+        storeLoggedInUser(loggedInUser);
+        window.location.href = "index.html"; // Redirect to main page
+    } else {
+        alert("Invalid credentials, please try again.");
+    }
+});
