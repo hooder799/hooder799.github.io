@@ -1,8 +1,7 @@
-// Check if the user is logged in
+// Helper function to check if the user is logged in
 function checkLoginStatus() {
     const user = localStorage.getItem("user");
     if (!user) {
-        // Redirect to login page if not logged in
         window.location.href = "login.html";
     }
 }
@@ -15,23 +14,23 @@ function redirectToMainPage() {
     }
 }
 
-// Handle login
+// Handle login form submission
 document.getElementById("login-form")?.addEventListener("submit", function(e) {
     e.preventDefault();
 
     const email = document.getElementById("login-email").value;
     const password = document.getElementById("login-password").value;
 
-    // Simulate login (in a real app, this would be checked against a database)
-    if (email && password) {
-        localStorage.setItem("user", email);  // Store the user email as the session
-        window.location.href = "index.html";  // Redirect to the main page
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.email === email && user.password === password) {
+        localStorage.setItem("loggedIn", JSON.stringify(user));
+        window.location.href = "index.html";
     } else {
-        alert("Please enter valid login credentials.");
+        alert("Incorrect credentials. Please try again.");
     }
 });
 
-// Handle sign up
+// Handle sign-up form submission
 document.getElementById("signup-form")?.addEventListener("submit", function(e) {
     e.preventDefault();
 
@@ -39,46 +38,44 @@ document.getElementById("signup-form")?.addEventListener("submit", function(e) {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    // Simulate sign up (in a real app, this data would be sent to a server)
-    if (email && username && password) {
-        localStorage.setItem("user", email);  // Simulate saving user data
-        window.location.href = "index.html";  // Redirect to the main page
+    // Check if email already exists
+    const existingUser = JSON.parse(localStorage.getItem("user"));
+    if (existingUser && existingUser.email === email) {
+        alert("User already exists. Please login.");
     } else {
-        alert("Please fill out all fields.");
+        // Create new user and store in localStorage
+        const newUser = {
+            email: email,
+            username: username,
+            password: password
+        };
+        localStorage.setItem("user", JSON.stringify(newUser));
+        alert("Account created successfully! Redirecting to login...");
+        window.location.href = "login.html";
     }
 });
 
-// Handle sending messages
-document.getElementById("send-message")?.addEventListener("click", function() {
-    const messageInput = document.getElementById("message-input");
-    const message = messageInput.value.trim();
+// Handle password recovery (reset password)
+document.getElementById("recovery-form")?.addEventListener("submit", function(e) {
+    e.preventDefault();
 
-    if (message) {
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("message");
-        messageElement.textContent = message;
-        document.getElementById("chat-messages").appendChild(messageElement);
-        messageInput.value = ""; // Clear the message input
-        messageElement.scrollIntoView(); // Scroll to the newest message
+    const email = document.getElementById("recovery-email").value;
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user && user.email === email) {
+        alert("A password reset link has been sent to your email (simulated).");
+        window.location.href = "login.html";
+    } else {
+        alert("No account found with that email.");
     }
 });
 
-// Handle emoji selection
-document.getElementById("emoji-picker")?.addEventListener("click", function(event) {
-    if (event.target.tagName === "IMG") {
-        const emoji = event.target.alt;  // Get the emoji that was clicked
-        const messageInput = document.getElementById("message-input");
-        messageInput.value += emoji;  // Append emoji to message input
-        messageInput.focus();  // Keep focus on message input
-    }
-});
+// Check if the user is already logged in and redirect to main page
+if (window.location.pathname === "/login.html" || window.location.pathname === "/signup.html") {
+    redirectToMainPage();
+}
 
 // Ensure the user is logged in on the main page
 if (window.location.pathname === "/index.html") {
     checkLoginStatus();
-}
-
-// Redirect to main page if already logged in
-if (window.location.pathname === "/login.html" || window.location.pathname === "/signup.html") {
-    redirectToMainPage();
 }
