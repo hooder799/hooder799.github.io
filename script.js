@@ -63,3 +63,53 @@ document.getElementById("login-form")?.addEventListener("submit", function (e) {
         alert("Invalid credentials, please try again.");
     }
 });
+
+// Display messages in the chat
+function displayMessages() {
+    const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+    const chatMessagesDiv = document.getElementById("chat-messages");
+    chatMessagesDiv.innerHTML = "";
+
+    messages.forEach(message => {
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message");
+        messageElement.textContent = `${message.username}: ${message.text}`;
+        chatMessagesDiv.appendChild(messageElement);
+    });
+}
+
+// Handle message sending
+document.getElementById("send-message")?.addEventListener("click", function () {
+    const messageInput = document.getElementById("message-input");
+    const messageText = messageInput.value.trim();
+
+    if (messageText === "") return;
+
+    const loggedInUser = getLoggedInUser();
+    if (!loggedInUser) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    const newMessage = {
+        username: loggedInUser.username,
+        text: messageText
+    };
+
+    const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+    messages.push(newMessage);
+    localStorage.setItem("chatMessages", JSON.stringify(messages));
+
+    messageInput.value = "";
+    displayMessages();
+});
+
+// Load messages when page is loaded
+window.onload = function () {
+    const loggedInUser = getLoggedInUser();
+    if (!loggedInUser) {
+        window.location.href = "login.html"; // Redirect to login if not logged in
+    } else {
+        displayMessages(); // Display existing messages
+    }
+};
