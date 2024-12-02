@@ -1,119 +1,78 @@
-/* Global Styles */
+/* Basic page styles */
 body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     margin: 0;
-    background-color: #36393f;
-    color: white;
-    display: flex;
+    background-color: #f0f0f0;
 }
 
-h1, h2 {
-    font-weight: bold;
-}
-
-/* Container */
 .container {
-    padding: 10px;
-}
-
-/* Sidebar */
-.sidebar {
-    width: 250px;
-    background-color: #2f3136;
-    padding: 20px;
-    border-right: 1px solid #444;
     display: flex;
-    flex-direction: column;
 }
 
-.sidebar h2 {
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-
-.sidebar button {
-    background-color: #7289da;
+.sidebar {
+    width: 200px;
+    padding: 20px;
+    background-color: #2f3136;
     color: white;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    border: none;
-    cursor: pointer;
+    border-radius: 10px;
 }
 
-.sidebar button:hover {
-    background-color: #5a6cb0;
-}
-
-/* Chat Area */
 .chat-container {
     flex-grow: 1;
     padding: 20px;
-    display: flex;
-    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+    margin-left: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 60%;
+    max-width: 600px;
 }
 
-.chat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+h2 {
+    color: #7289da;
 }
 
-.chat-header h2 {
-    font-size: 20px;
-    margin: 0;
-}
-
-.chat-messages {
-    flex-grow: 1;
+/* Chat messages styling */
+#chat-messages {
+    height: 300px;
     overflow-y: auto;
-    margin-top: 20px;
-    padding-right: 20px;
-}
-
-.message {
-    background-color: #40444b;
+    border: 1px solid #ddd;
     padding: 10px;
+    background-color: #f9f9f9;
     border-radius: 10px;
     margin-bottom: 10px;
 }
 
-.message.user {
-    background-color: #7289da;
+.message {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #000;
 }
 
-input[type="text"], textarea {
-    background-color: #2f3136;
-    border: 1px solid #444;
-    color: white;
+textarea {
+    width: 100%;
+    height: 80px;
+    border: 1px solid #ddd;
     padding: 10px;
     border-radius: 5px;
-    width: 100%;
+    font-size: 14px;
+    resize: none;
+    margin-bottom: 10px;
 }
 
 button {
     padding: 10px 15px;
     background-color: #7289da;
-    border: none;
     color: white;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #5a6cb0;
-}
-
-/* Emoji Picker */
-.emoji-picker {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    margin-top: 10px;
-}
-
-.emoji-picker img {
-    width: 30px;
-    cursor: pointer;
-    margin-right: 5px;
+    background-color: #5a6fb1;
 }
