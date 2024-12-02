@@ -1,88 +1,37 @@
-// Sign-up: Store user details in localStorage
-document.getElementById("signup-form")?.addEventListener("submit", function (e) {
-    e.preventDefault();
+// Helper functions to interact with localStorage
 
-    const email = document.getElementById("email").value;
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-
-    const newUser = { email, username, password };
-    localStorage.setItem("user", JSON.stringify(newUser));
-
-    alert("Account created successfully!");
-    window.location.href = "login.html"; // Redirect to login page
-});
-
-// Login: Check credentials from localStorage
-document.getElementById("login-form")?.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const emailOrUsername = document.getElementById("login-email").value;
-    const password = document.getElementById("login-password").value;
-
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-
-    if (storedUser && (storedUser.email === emailOrUsername || storedUser.username === emailOrUsername) && storedUser.password === password) {
-        localStorage.setItem("loggedIn", JSON.stringify(storedUser));
-        window.location.href = "index.html"; // Redirect to main page
-    } else {
-        alert("Invalid credentials, please try again.");
-    }
-});
-
-// Load messages from localStorage
-function loadMessages() {
-    return JSON.parse(localStorage.getItem("chatMessages")) || [];
-}
-
-// Save messages to localStorage
-function saveMessages(messages) {
-    localStorage.setItem("chatMessages", JSON.stringify(messages));
-}
-
-// Display messages in chat
-function displayMessages() {
-    const messages = loadMessages();
-    const chatMessagesDiv = document.getElementById("chat-messages");
-    chatMessagesDiv.innerHTML = "";
-
-    messages.forEach(message => {
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("message");
-        messageElement.textContent = `${message.username}: ${message.text}`;
-        chatMessagesDiv.appendChild(messageElement);
-    });
-}
-
-// Send message
-document.getElementById("send-message")?.addEventListener("click", function() {
-    const messageInput = document.getElementById("message-input");
-    const messageText = messageInput.value.trim();
-
-    if (messageText === "") return;
-
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedIn"));
-    if (!loggedInUser) {
-        alert("Please log in first.");
-        window.location.href = "login.html";
+// Save user data (signup)
+function saveUserData(email, username, password) {
+    const user = { email, username, password };
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    
+    // Check if user already exists
+    if (users.some(existingUser => existingUser.email === email || existingUser.username === username)) {
+        alert("User already exists!");
         return;
     }
+    
+    users.push(user);
+    localStorage.setItem("users", JSON.stringify(users));
+}
 
-    const newMessage = { username: loggedInUser.username, text: messageText };
-    const messages = loadMessages();
-    messages.push(newMessage);
-    saveMessages(messages);
+// Retrieve user data for login
+function getUserData(emailOrUsername, password) {
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    return users.find(user => (user.email === emailOrUsername || user.username === emailOrUsername) && user.password === password);
+}
 
-    messageInput.value = "";
-    displayMessages();
-});
+// Store logged-in user
+function storeLoggedInUser(user) {
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
+}
 
-// Load messages on page load
-window.onload = function() {
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedIn"));
-    if (!loggedInUser) {
-        window.location.href = "login.html"; // Redirect to login page if not logged in
-    } else {
-        displayMessages(); // Show saved messages
-    }
-};
+// Get logged-in user data
+function getLoggedInUser() {
+    return JSON.parse(localStorage.getItem("loggedInUser"));
+}
+
+// Logout: Remove the logged-in user
+function logout() {
+    localStorage.removeItem("loggedInUser");
+}
