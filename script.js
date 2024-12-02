@@ -35,3 +35,16 @@ function getLoggedInUser() {
 function logout() {
     localStorage.removeItem("loggedInUser");
 }
+
+document.getElementById("signup-form")?.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    saveUserData(email, username, password);
+
+    alert("Account created successfully!");
+    window.location.href = "login.html"; // Redirect to login page
+});
+
