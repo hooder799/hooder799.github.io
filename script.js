@@ -72,3 +72,53 @@ window.onload = function () {
         }
     });
 };
+
+// Ensure the user is logged in before accessing the chat page
+window.onload = function () {
+    const loggedInUser = getLoggedInUser();
+    if (!loggedInUser) {
+        window.location.href = "login.html"; // Redirect to login page if not logged in
+    } else {
+        displayMessages(); // Display messages if the user is logged in
+    }
+
+    // Display messages in the chat
+    function displayMessages() {
+        const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+        const chatMessagesDiv = document.getElementById("chat-messages");
+        chatMessagesDiv.innerHTML = "";
+
+        messages.forEach(message => {
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message");
+            messageElement.textContent = `${message.username}: ${message.text}`;
+            chatMessagesDiv.appendChild(messageElement);
+        });
+    }
+
+    // Handle message sending
+    document.getElementById("send-message")?.addEventListener("click", function () {
+        const messageInput = document.getElementById("message-input");
+        const messageText = messageInput.value.trim();
+
+        if (messageText === "") return;
+
+        const loggedInUser = getLoggedInUser();
+        if (!loggedInUser) {
+            window.location.href = "login.html"; // Redirect if not logged in
+            return;
+        }
+
+        const newMessage = {
+            username: loggedInUser.username,
+            text: messageText
+        };
+
+        const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+        messages.push(newMessage);
+        localStorage.setItem("chatMessages", JSON.stringify(messages));
+
+        messageInput.value = "";
+        displayMessages();
+    });
+};
