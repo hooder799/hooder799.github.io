@@ -1,211 +1,117 @@
-window.onload = function () {
-    const loggedInUser = getLoggedInUser();
-    const currentPage = window.location.pathname;
+let currentUser = null;
 
-    // If user is already logged in, show the chat interface
-    if (loggedInUser && currentPage.includes("index.html")) {
-        window.location.href = 'chat.html';
-        return;
-    }
+// Fake data for testing purposes
+const users = [
+    { username: 'user1', password: 'password1', friends: ['user2'], sentRequests: [], receivedRequests: [] },
+    { username: 'user2', password: 'password2', friends: ['user1'], sentRequests: [], receivedRequests: [] }
+];
 
-    // Show buttons only on the index page
-    if (currentPage.includes("index.html")) {
-        // Show Login and Sign Up buttons
-        document.getElementById("login-button").addEventListener("click", function() {
-            window.location.href = 'login.html';
-        });
-        
-        document.getElementById("sign-up-button").addEventListener("click", function() {
-            window.location.href = 'signup.html';
-        });
-    }
+// Login function
+function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
-    // Handle login logic
-    if (loggedInUser) {
-        // Handle displaying the friends and messages interface
-        displayFriendsAndRequests(loggedInUser);
-        displayMessages(loggedInUser);
+    // Validate the username and password
+    const user = users.find(u => u.username === username && u.password === password);
+    if (user) {
+        currentUser = user;
+        showMainInterface();
+    } else {
+        alert('Invalid credentials');
     }
-};
-
-// Helper functions to interact with localStorage
-function saveUserData(email, username, password) {
-    const user = { email, username, password, friends: [], sentRequests: [], receivedRequests: [] };
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-    
-    if (users.some(existingUser => existingUser.email === email || existingUser.username === username)) {
-        alert("User already exists!");
-        return;
-    }
-    
-    users.push(user);
-    localStorage.setItem("users", JSON.stringify(users));
 }
 
-function getUserData(emailOrUsername, password) {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    return users.find(user => (user.email === emailOrUsername || user.username === emailOrUsername) && user.password === password);
+// Signup function (for simplicity, we simulate it with existing data)
+function signup() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    if (users.some(u => u.username === username)) {
+        alert('Username already exists');
+    } else {
+        users.push({ username, password, friends: [], sentRequests: [], receivedRequests: [] });
+        alert('Account created! Please login.');
+    }
 }
 
-function storeLoggedInUser(user) {
-    localStorage.setItem("loggedInUser", JSON.stringify(user));
+// Show the main chat interface after login
+function showMainInterface() {
+    document.getElementById('authForm').style.display = 'none';
+    document.getElementById('mainContainer').style.display = 'flex';
+    document.getElementById('sidebar').style.display = 'block';
+    showChat();
 }
 
-function getLoggedInUser() {
-    return JSON.parse(localStorage.getItem("loggedInUser"));
-}
-
+// Logout function
 function logout() {
-    localStorage.removeItem("loggedInUser");
-    window.location.href = "index.html";
+    currentUser = null;
+    document.getElementById('authForm').style.display = 'block';
+    document.getElementById('mainContainer').style.display = 'none';
 }
 
-// Display messages in chat
-function displayMessages(user) {
-    const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
-    const chatMessagesDiv = document.getElementById("chat-messages");
-    chatMessagesDiv.innerHTML = "";
-    messages.forEach((message, index) => {
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("message");
-        messageElement.innerHTML = `
-            <span>${message.username}: ${message.text}</span>
-            ${message.username === user.username ? `<button onclick="deleteMessage(${index})">Delete</button>` : ""}
-        `;
-        chatMessagesDiv.appendChild(messageElement);
+// Show chat
+function showChat() {
+    document.getElementById('chatContainer').style.display = 'block';
+    document.getElementById('friendsList').style.display = 'none';
+    document.getElementById('receivedRequests').style.display = 'none';
+    document.getElementById('sentRequests').style.display = 'none';
+}
+
+// Show Friends List
+function showFriends() {
+    document.getElementById('friendsList').style.display = 'block';
+    document.getElementById('receivedRequests').style.display = 'none';
+    document.getElementById('sentRequests').style.display = 'none';
+    renderFriendsList();
+}
+
+// Show Received Requests
+function showRequests() {
+    document.getElementById('friendsList').style.display = 'none';
+    document.getElementById('receivedRequests').style.display = 'block';
+    document.getElementById('sentRequests').style.display = 'none';
+    renderReceivedRequests();
+}
+
+// Render Friends List
+function renderFriendsList() {
+    const friendsUl = document.getElementById('friendsListUl');
+    friendsUl.innerHTML = '';
+    currentUser.friends.forEach(friend => {
+        const li = document.createElement('li');
+        li.textContent = friend;
+        friendsUl.appendChild(li);
     });
+}
+
+// Render Received Requests
+function renderReceivedRequests() {
+    const receivedUl = document.getElementById('receivedRequestsUl');
+    receivedUl.innerHTML = '';
+    currentUser.receivedRequests.forEach(request => {
+        const li = document.createElement('li');
+        li.textContent = request;
+        receivedUl.appendChild(li);
+    });
+}
+
+// Send a message
+function sendMessage() {
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value;
+
+    if (message) {
+        const chatMessages = document.getElementById('chatMessages');
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message');
+        messageElement.innerHTML = `<span>${message}</span><button onclick="deleteMessage(this)">Delete</button>`;
+        chatMessages.appendChild(messageElement);
+        messageInput.value = '';
+    }
 }
 
 // Delete a message
-window.deleteMessage = function (index) {
-    const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
-    messages.splice(index, 1);
-    localStorage.setItem("chatMessages", JSON.stringify(messages));
-    displayMessages(getLoggedInUser());
-};
-
-// Display friends and requests
-function displayFriendsAndRequests(user) {
-    const friendsList = document.getElementById("friends-list");
-    const receivedRequests = document.getElementById("received-requests");
-    const sentRequests = document.getElementById("sent-requests");
-
-    friendsList.innerHTML = "";
-    receivedRequests.innerHTML = "";
-    sentRequests.innerHTML = "";
-
-    // Display friends
-    user.friends.forEach(friend => {
-        const li = document.createElement("li");
-        li.textContent = friend;
-        friendsList.appendChild(li);
-    });
-
-    // Display received friend requests
-    user.receivedRequests.forEach((request, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-            ${request} <button onclick="acceptFriendRequest(${index})">Accept</button> 
-            <button onclick="declineFriendRequest(${index})">Decline</button>
-        `;
-        receivedRequests.appendChild(li);
-    });
-
-    // Display sent friend requests
-    user.sentRequests.forEach((request, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-            ${request} <button onclick="cancelFriendRequest(${index})">Cancel</button>
-        `;
-        sentRequests.appendChild(li);
-    });
+function deleteMessage(button) {
+    button.parentElement.remove();
 }
 
-// Add friend logic
-document.getElementById("add-friend-button")?.addEventListener("click", function () {
-    const usernameToAdd = prompt("Enter the username of the person you want to add:");
-    if (usernameToAdd) {
-        const loggedInUser = getLoggedInUser();
-        const users = JSON.parse(localStorage.getItem("users"));
-        const userToAdd = users.find(user => user.username === usernameToAdd);
-        if (userToAdd && userToAdd.username !== loggedInUser.username) {
-            if (!loggedInUser.sentRequests.includes(usernameToAdd) && !loggedInUser.friends.includes(usernameToAdd)) {
-                loggedInUser.sentRequests.push(usernameToAdd);
-                storeLoggedInUser(loggedInUser);
-                localStorage.setItem("users", JSON.stringify(users));
-                alert("Friend request sent!");
-                displayFriendsAndRequests(loggedInUser);
-            } else {
-                alert("You already sent a request or are already friends.");
-            }
-        } else {
-            alert("User not found.");
-        }
-    }
-});
-
-// Accept friend request
-window.acceptFriendRequest = function (index) {
-    const loggedInUser = getLoggedInUser();
-    const users = JSON.parse(localStorage.getItem("users"));
-    const friendUsername = loggedInUser.receivedRequests[index];
-    loggedInUser.friends.push(friendUsername);
-    const friendUser = users.find(user => user.username === friendUsername);
-    friendUser.friends.push(loggedInUser.username);
-
-    loggedInUser.receivedRequests.splice(index, 1);
-    friendUser.sentRequests = friendUser.sentRequests.filter(request => request !== loggedInUser.username);
-    storeLoggedInUser(loggedInUser);
-    localStorage.setItem("users", JSON.stringify(users));
-
-    displayFriendsAndRequests(loggedInUser);
-    displayFriendsAndRequests(friendUser);
-};
-
-// Decline friend request
-window.declineFriendRequest = function (index) {
-    const loggedInUser = getLoggedInUser();
-    const users = JSON.parse(localStorage.getItem("users"));
-    const friendUsername = loggedInUser.receivedRequests[index];
-    loggedInUser.receivedRequests.splice(index, 1);
-    const friendUser = users.find(user => user.username === friendUsername);
-    friendUser.sentRequests = friendUser.sentRequests.filter(request => request !== loggedInUser.username);
-    storeLoggedInUser(loggedInUser);
-    localStorage.setItem("users", JSON.stringify(users));
-
-    displayFriendsAndRequests(loggedInUser);
-    displayFriendsAndRequests(friendUser);
-};
-
-// Cancel sent friend request
-window.cancelFriendRequest = function (index) {
-    const loggedInUser = getLoggedInUser();
-    const users = JSON.parse(localStorage.getItem("users"));
-    const friendUsername = loggedInUser.sentRequests[index];
-    loggedInUser.sentRequests.splice(index, 1);
-    const friendUser = users.find(user => user.username === friendUsername);
-    friendUser.receivedRequests = friendUser.receivedRequests.filter(request => request !== loggedInUser.username);
-    storeLoggedInUser(loggedInUser);
-    localStorage.setItem("users", JSON.stringify(users));
-
-    displayFriendsAndRequests(loggedInUser);
-    displayFriendsAndRequests(friendUser);
-};
-
-// Logout
-document.getElementById("logout-button")?.addEventListener("click", function () {
-    logout();
-});
-
-// Create server feature
-document.getElementById('create-server-button')?.addEventListener('click', function() {
-    const serverName = prompt("Enter the name of the new server:");
-    if (serverName) {
-        const loggedInUser = getLoggedInUser();
-        const servers = JSON.parse(localStorage.getItem('servers')) || [];
-        const newServer = { name: serverName, members: [loggedInUser.username] };
-        servers.push(newServer);
-        localStorage.setItem('servers', JSON.stringify(servers));
-        alert("Server created!");
-    }
-});
