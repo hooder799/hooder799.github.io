@@ -1,28 +1,40 @@
+<!-- sign-up.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sign Up - Discord Clone</title>
+    <title>Sign Up</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <div class="container">
-        <div class="auth-form">
-            <h1>Sign Up for Discord</h1>
-            <form id="signup-form">
-                <input type="email" id="email" placeholder="Email" required>
-                <input type="text" id="username" placeholder="Username" required>
-                <input type="password" id="password" placeholder="Password" required>
-                <button type="submit">Sign Up</button>
-            </form>
-            <div>
-                <p>Already have an account? <a href="login.html" style="color: #99aab5;">Login</a></p>
-            </div>
-        </div>
-    </div>
 
-    <script src="script.js"></script>
+    <header>
+        <h1>Create Your Account</h1>
+        <nav>
+            <a href="login.html">Login</a>
+        </nav>
+    </header>
+
+    <section class="content">
+        <form id="sign-up-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter Username" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter Email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter Password" required>
+
+            <button type="submit">Sign Up</button>
+        </form>
+
+        <div id="sign-up-message"></div>
+
+        <button id="add-friend-button" class="hidden">Add a Friend</button>
+    </section>
+
 </body>
 </html>
