@@ -27,38 +27,49 @@ function getLoggedInUser() {
 
 function logout() {
     localStorage.removeItem("loggedInUser");
+    window.location.href = "login.html";
 }
 
 // Handle login logic
 window.onload = function () {
     const loggedInUser = getLoggedInUser();
-    if (!loggedInUser) {
-        window.location.href = "login.html";
+
+    // If the user is not logged in and tries to access the main page, redirect to login
+    if (!loggedInUser && window.location.pathname !== '/login.html') {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // If the user is already logged in and tries to access login page, redirect to chat
+    if (loggedInUser && window.location.pathname === '/login.html') {
+        window.location.href = 'index.html';
         return;
     }
 
     // Display initial state (friends and requests)
-    displayFriendsAndRequests(loggedInUser);
-    displayMessages(loggedInUser);
+    if (loggedInUser) {
+        displayFriendsAndRequests(loggedInUser);
+        displayMessages(loggedInUser);
 
-    // Send message logic
-    document.getElementById("send-message").addEventListener("click", function () {
-        const messageText = document.getElementById("message-input").value.trim();
-        if (messageText) {
-            const loggedInUser = getLoggedInUser();
-            if (loggedInUser) {
-                const newMessage = {
-                    username: loggedInUser.username,
-                    text: messageText
-                };
-                const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
-                messages.push(newMessage);
-                localStorage.setItem("chatMessages", JSON.stringify(messages));
-                document.getElementById("message-input").value = "";
-                displayMessages(loggedInUser);
+        // Send message logic
+        document.getElementById("send-message").addEventListener("click", function () {
+            const messageText = document.getElementById("message-input").value.trim();
+            if (messageText) {
+                const loggedInUser = getLoggedInUser();
+                if (loggedInUser) {
+                    const newMessage = {
+                        username: loggedInUser.username,
+                        text: messageText
+                    };
+                    const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+                    messages.push(newMessage);
+                    localStorage.setItem("chatMessages", JSON.stringify(messages));
+                    document.getElementById("message-input").value = "";
+                    displayMessages(loggedInUser);
+                }
             }
-        }
-    });
+        });
+    }
 
     // Display messages in chat
     function displayMessages(user) {
@@ -192,6 +203,5 @@ window.onload = function () {
     // Logout
     document.getElementById("logout-button").addEventListener("click", function () {
         logout();
-        window.location.href = "login.html";
     });
 };
