@@ -7,9 +7,11 @@ body {
     margin: 0;
     background-color: #f0f0f0;
 }
+
 .container {
     display: flex;
 }
+
 .sidebar {
     width: 200px;
     padding: 20px;
@@ -17,6 +19,7 @@ body {
     color: white;
     border-radius: 10px;
 }
+
 .chat-container {
     flex-grow: 1;
     padding: 20px;
@@ -27,9 +30,11 @@ body {
     width: 60%;
     max-width: 600px;
 }
+
 h2 {
     color: #7289da;
 }
+
 #chat-messages {
     height: 300px;
     overflow-y: auto;
@@ -39,11 +44,13 @@ h2 {
     border-radius: 10px;
     margin-bottom: 10px;
 }
+
 .message {
     margin-bottom: 10px;
     font-size: 14px;
     color: #000;
 }
+
 textarea {
     width: 100%;
     height: 80px;
@@ -54,6 +61,7 @@ textarea {
     resize: none;
     margin-bottom: 10px;
 }
+
 button {
     padding: 10px 15px;
     background-color: #7289da;
@@ -62,9 +70,20 @@ button {
     border-radius: 5px;
     cursor: pointer;
 }
+
 button:hover {
     background-color: #5a6fb1;
 }
-input[type="file"] {
-    margin-top: 10px;
+
+#call-buttons {
+    margin-top: 20px;
+}
+
+#call-buttons button {
+    background-color: #43b581;
+    margin-right: 10px;
+}
+
+#call-buttons button:hover {
+    background-color: #35a070;
 }
