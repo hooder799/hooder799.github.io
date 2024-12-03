@@ -7,12 +7,87 @@ function storeLoggedInUser(user) {
     localStorage.setItem("loggedInUser", JSON.stringify(user));
 }
 
-// Add Friend functionality
-document.getElementById("add-friend-btn")?.addEventListener("click", function () {
-    const username = prompt("Enter the username of the friend to add:");
-    if (!username) return;
+// Toggle visibility of pages
+function showPage(pageId) {
+    const pages = document.querySelectorAll('.page');
+    pages.forEach(page => page.style.display = 'none');
+    document.getElementById(pageId).style.display = 'block';
+}
 
+// Show the home page
+document.getElementById("home-btn").addEventListener("click", () => {
+    showPage("home-page");
+    displayMessages();
+    loadFriendsAndRequests();
+});
+
+// Show login page
+document.getElementById("login-btn").addEventListener("click", () => {
+    showPage("login-page");
+});
+
+// Show signup page
+document.getElementById("signup-btn").addEventListener("click", () => {
+    showPage("signup-page");
+});
+
+// Show add friend page
+document.getElementById("add-friend-btn").addEventListener("click", () => {
+    showPage("add-friend-page");
+});
+
+// Login functionality
+document.getElementById("submit-login").addEventListener("click", function () {
+    const username = document.getElementById("login-username").value;
+    const password = document.getElementById("login-password").value;
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    const user = users.find(u => u.username === username && u.password === password);
+    
+    if (user) {
+        storeLoggedInUser(user);
+        alert("Login successful!");
+        showPage("home-page");
+        displayMessages();
+        loadFriendsAndRequests();
+    } else {
+        alert("Invalid credentials");
+    }
+});
+
+// Signup functionality
+document.getElementById("submit-signup").addEventListener("click", function () {
+    const username = document.getElementById("signup-username").value;
+    const password = document.getElementById("signup-password").value;
+
+    if (!username || !password) {
+        alert("Please fill in all fields!");
+        return;
+    }
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    if (users.find(u => u.username === username)) {
+        alert("Username already exists!");
+        return;
+    }
+
+    const newUser = {
+        username: username,
+        password: password,
+        friends: []
+    };
+    users.push(newUser);
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("Signup successful! Please log in.");
+    showPage("login-page");
+});
+
+// Add Friend functionality
+document.getElementById("send-friend-request").addEventListener("click", function () {
+    const username = document.getElementById("friend-username").value;
     const loggedInUser = getLoggedInUser();
+
     if (!loggedInUser) {
         alert("Please login first!");
         return;
@@ -20,21 +95,22 @@ document.getElementById("add-friend-btn")?.addEventListener("click", function ()
 
     let users = JSON.parse(localStorage.getItem("users")) || [];
     const friend = users.find(user => user.username === username);
-    if (friend) {
-        // Send friend request
+    if (friend && friend.username !== loggedInUser.username) {
         const requests = JSON.parse(localStorage.getItem("friendRequests")) || [];
         requests.push({ from: loggedInUser.username, to: friend.username, status: "pending" });
         localStorage.setItem("friendRequests", JSON.stringify(requests));
+
         alert("Friend request sent!");
     } else {
-        alert("User not found!");
+        alert("User not found or you cannot send a request to yourself.");
     }
 });
 
-// Handle message sending
-document.getElementById("send-message")?.addEventListener("click", function () {
+// Send message functionality
+document.getElementById("send-message").addEventListener("click", function () {
     const messageInput = document.getElementById("message-input");
     const messageText = messageInput.value.trim();
+
     if (messageText === "") return;
 
     const loggedInUser = getLoggedInUser();
@@ -81,18 +157,14 @@ function deleteMessage(messageIndex) {
     displayMessages(); // Update the chat display after deletion
 }
 
-// Display friends and pending requests
-window.onload = function () {
+// Load friends and pending requests for the home page
+function loadFriendsAndRequests() {
     const loggedInUser = getLoggedInUser();
-    if (!loggedInUser) {
-        alert("Please login first!");
-        return;
-    }
+    if (!loggedInUser) return;
 
     // Display friends
     const friendsList = document.querySelector(".friends-list");
     friendsList.innerHTML = '';
-    loggedInUser.friends = loggedInUser.friends || [];
     loggedInUser.friends.forEach(friend => {
         const friendItem = document.createElement("div");
         friendItem.classList.add("friend-item");
@@ -110,76 +182,39 @@ window.onload = function () {
             requestItem.innerHTML = `
                 ${request.from} 
                 <button onclick="acceptRequest('${request.from}')">Accept</button>
-                <button class="decline" onclick="declineRequest('${request.from}')">Decline</button>
+                <button onclick="declineRequest('${request.from}')">Decline</button>
             `;
             pendingRequests.appendChild(requestItem);
         }
     });
-};
+}
 
 // Accept friend request
-function acceptRequest(username) {
+function acceptRequest(fromUser) {
     const loggedInUser = getLoggedInUser();
     const requests = JSON.parse(localStorage.getItem("friendRequests")) || [];
-    const request = requests.find(req => req.from === username && req.to === loggedInUser.username);
-    if (request) {
-        request.status = "accepted";
-        loggedInUser.friends.push(username);
+    const requestIndex = requests.findIndex(req => req.from === fromUser && req.to === loggedInUser.username);
+    
+    if (requestIndex !== -1) {
+        // Add the user to the friend's list
+        loggedInUser.friends.push(fromUser);
         localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+
+        // Mark the request as accepted
+        requests[requestIndex].status = "accepted";
         localStorage.setItem("friendRequests", JSON.stringify(requests));
 
-        // Dynamically update the UI without refreshing the page
-        updateFriendsList(loggedInUser);
-        updatePendingRequests(loggedInUser);
+        loadFriendsAndRequests();
     }
 }
 
 // Decline friend request
-function declineRequest(username) {
-    const loggedInUser = getLoggedInUser();
-    const requests = JSON.parse(localStorage.getItem("friendRequests")) || [];
-    const index = requests.findIndex(req => req.from === username && req.to === loggedInUser.username);
-    if (index !== -1) {
-        requests.splice(index, 1);
-        localStorage.setItem("friendRequests", JSON.stringify(requests));
+function declineRequest(fromUser) {
+    let requests = JSON.parse(localStorage.getItem("friendRequests")) || [];
+    requests = requests.filter(req => !(req.from === fromUser && req.status === "pending"));
+    localStorage.setItem("friendRequests", JSON.stringify(requests));
 
-        // Dynamically update the UI without refreshing the page
-        updatePendingRequests(loggedInUser);
-    }
+    loadFriendsAndRequests();
 }
 
-// Update friends list dynamically
-function updateFriendsList(loggedInUser) {
-    const friendsList = document.querySelector(".friends-list");
-    friendsList.innerHTML = '';
-    loggedInUser.friends.forEach(friend => {
-        const friendItem = document.createElement("div");
-        friendItem.classList.add("friend-item");
-        friendItem.innerHTML = `${friend} <button onclick="startChat('${friend}')">Chat</button>`;
-        friendsList.appendChild(friendItem);
-    });
-}
-
-// Update pending requests dynamically
-function updatePendingRequests(loggedInUser) {
-    const pendingRequests = document.querySelector(".pending-requests");
-    pendingRequests.innerHTML = '';
-    const requests = JSON.parse(localStorage.getItem("friendRequests")) || [];
-    requests.forEach(request => {
-        if (request.to === loggedInUser.username && request.status === "pending") {
-            const requestItem = document.createElement("div");
-            requestItem.classList.add("pending-request-item");
-            requestItem.innerHTML = `
-                ${request.from} 
-                <button onclick="acceptRequest('${request.from}')">Accept</button>
-                <button class="decline" onclick="declineRequest('${request.from}')">Decline</button>
-            `;
-            pendingRequests.appendChild(requestItem);
-        }
-    });
-}
-
-// Start chat with a friend
-function startChat(friendUsername) {
-    alert(`Starting chat with ${friendUsername}`);
-}
+showPage("home-page"); // Default page on load
