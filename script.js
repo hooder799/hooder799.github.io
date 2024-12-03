@@ -32,12 +32,14 @@ function logout() {
 // Handle login logic
 window.onload = function () {
     const loggedInUser = getLoggedInUser();
-    if (loggedInUser) {
-        displayFriendsAndRequests(loggedInUser);
-        displayMessages(loggedInUser);
-    } else {
+    if (!loggedInUser) {
         window.location.href = "login.html";
+        return;
     }
+
+    // Display initial state (friends and requests)
+    displayFriendsAndRequests(loggedInUser);
+    displayMessages(loggedInUser);
 
     // Send message logic
     document.getElementById("send-message").addEventListener("click", function () {
@@ -58,7 +60,7 @@ window.onload = function () {
         }
     });
 
-    // Display messages
+    // Display messages in chat
     function displayMessages(user) {
         const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
         const chatMessagesDiv = document.getElementById("chat-messages");
@@ -80,9 +82,9 @@ window.onload = function () {
         messages.splice(index, 1);
         localStorage.setItem("chatMessages", JSON.stringify(messages));
         displayMessages(loggedInUser);
-    }
+    };
 
-    // Display friends and friend requests
+    // Display friends and requests
     function displayFriendsAndRequests(user) {
         const friendsList = document.getElementById("friends-list");
         const receivedRequests = document.getElementById("received-requests");
@@ -126,22 +128,19 @@ window.onload = function () {
             const loggedInUser = getLoggedInUser();
             const users = JSON.parse(localStorage.getItem("users"));
             const userToAdd = users.find(user => user.username === usernameToAdd);
-
-            if (userToAdd) {
-                // Send friend request
+            if (userToAdd && userToAdd.username !== loggedInUser.username) {
                 if (!loggedInUser.sentRequests.includes(usernameToAdd) && !loggedInUser.friends.includes(usernameToAdd)) {
                     loggedInUser.sentRequests.push(usernameToAdd);
-                    userToAdd.receivedRequests.push(loggedInUser.username);
+                    storeLoggedInUser(loggedInUser);
+                    localStorage.setItem("users", JSON.stringify(users));
                     alert("Friend request sent!");
+                    displayFriendsAndRequests(loggedInUser);
                 } else {
-                    alert("You are already friends or have sent a request.");
+                    alert("You already sent a request or are already friends.");
                 }
             } else {
                 alert("User not found.");
             }
-            storeLoggedInUser(loggedInUser);
-            localStorage.setItem("users", JSON.stringify(users));
-            displayFriendsAndRequests(loggedInUser);
         }
     });
 
@@ -149,14 +148,12 @@ window.onload = function () {
     window.acceptFriendRequest = function (index) {
         const loggedInUser = getLoggedInUser();
         const users = JSON.parse(localStorage.getItem("users"));
-        const user = users.find(user => user.username === loggedInUser.username);
-
-        const friendUsername = user.receivedRequests[index];
-        user.friends.push(friendUsername);
+        const friendUsername = loggedInUser.receivedRequests[index];
         loggedInUser.friends.push(friendUsername);
-
-        user.receivedRequests.splice(index, 1);
         const friendUser = users.find(user => user.username === friendUsername);
+        friendUser.friends.push(loggedInUser.username);
+
+        loggedInUser.receivedRequests.splice(index, 1);
         friendUser.sentRequests = friendUser.sentRequests.filter(request => request !== loggedInUser.username);
         storeLoggedInUser(loggedInUser);
         localStorage.setItem("users", JSON.stringify(users));
@@ -168,10 +165,8 @@ window.onload = function () {
     window.declineFriendRequest = function (index) {
         const loggedInUser = getLoggedInUser();
         const users = JSON.parse(localStorage.getItem("users"));
-        const user = users.find(user => user.username === loggedInUser.username);
-
-        const friendUsername = user.receivedRequests[index];
-        user.receivedRequests.splice(index, 1);
+        const friendUsername = loggedInUser.receivedRequests[index];
+        loggedInUser.receivedRequests.splice(index, 1);
         const friendUser = users.find(user => user.username === friendUsername);
         friendUser.sentRequests = friendUser.sentRequests.filter(request => request !== loggedInUser.username);
         storeLoggedInUser(loggedInUser);
@@ -180,14 +175,12 @@ window.onload = function () {
         displayFriendsAndRequests(loggedInUser);
     };
 
-    // Cancel friend request
+    // Cancel sent friend request
     window.cancelFriendRequest = function (index) {
         const loggedInUser = getLoggedInUser();
         const users = JSON.parse(localStorage.getItem("users"));
-        const user = users.find(user => user.username === loggedInUser.username);
-
-        const friendUsername = user.sentRequests[index];
-        user.sentRequests.splice(index, 1);
+        const friendUsername = loggedInUser.sentRequests[index];
+        loggedInUser.sentRequests.splice(index, 1);
         const friendUser = users.find(user => user.username === friendUsername);
         friendUser.receivedRequests = friendUser.receivedRequests.filter(request => request !== loggedInUser.username);
         storeLoggedInUser(loggedInUser);
@@ -196,7 +189,7 @@ window.onload = function () {
         displayFriendsAndRequests(loggedInUser);
     };
 
-    // Logout logic
+    // Logout
     document.getElementById("logout-button").addEventListener("click", function () {
         logout();
         window.location.href = "login.html";
