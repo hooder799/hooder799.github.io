@@ -171,6 +171,7 @@ window.onload = function () {
         localStorage.setItem("users", JSON.stringify(users));
 
         displayFriendsAndRequests(loggedInUser);
+        displayFriendsAndRequests(friendUser);
     };
 
     // Decline friend request
@@ -185,6 +186,7 @@ window.onload = function () {
         localStorage.setItem("users", JSON.stringify(users));
 
         displayFriendsAndRequests(loggedInUser);
+        displayFriendsAndRequests(friendUser);
     };
 
     // Cancel sent friend request
@@ -199,10 +201,40 @@ window.onload = function () {
         localStorage.setItem("users", JSON.stringify(users));
 
         displayFriendsAndRequests(loggedInUser);
+        displayFriendsAndRequests(friendUser);
     };
 
     // Logout
     document.getElementById("logout-button").addEventListener("click", function () {
         logout();
     });
+
+    // Create server feature
+    document.getElementById('create-server-button').addEventListener('click', function() {
+        const serverName = prompt("Enter the name of the new server:");
+        if (serverName) {
+            const loggedInUser = getLoggedInUser();
+            const servers = JSON.parse(localStorage.getItem('servers')) || [];
+            const newServer = { name: serverName, members: [loggedInUser.username] };
+            servers.push(newServer);
+            localStorage.setItem('servers', JSON.stringify(servers));
+            alert("Server created!");
+        }
+    });
 };
+
+// Password Recovery Feature (Simulated)
+document.getElementById('recovery-form')?.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const email = document.getElementById('recovery-email').value;
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(u => u.email === email);
+    const statusMessage = document.getElementById('status-message');
+
+    if (user) {
+        statusMessage.textContent = `A password reset link has been sent to ${email}.`;
+        alert("Password reset link sent!");
+    } else {
+        statusMessage.textContent = "Email not found.";
+    }
+});
