@@ -133,3 +133,11 @@ document.getElementById("logout-button")?.addEventListener("click", function () 
     logout();
     window.location.href = "login.html"; // Redirect to login page after logout
 });
+
+
+// Logout functionality
+document.getElementById("logout-button")?.addEventListener("click", function () {
+    logout();
+    window.location.href = "login.html"; // Redirect to login page after logout
+});
+
