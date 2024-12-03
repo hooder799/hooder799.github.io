@@ -1,38 +1,30 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #36393f;
-    color: #ffffff;
-}
-
-.container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    justify-content: space-between;
 }
 
-.auth-form {
+.sidebar {
+    width: 250px;
     background-color: #2f3136;
+    color: white;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    height: 100%;
 }
 
-input {
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    border: none;
-    width: 100%;
+.chat-container {
+    margin-left: 260px;
+    padding: 20px;
+    width: calc(100% - 260px);
 }
 
 button {
     background-color: #7289da;
     color: white;
-    padding: 10px 20px;
+    padding: 10px;
     border: none;
     border-radius: 5px;
-    width: 100%;
     cursor: pointer;
 }
 
@@ -40,19 +32,9 @@ button:hover {
     background-color: #5f73a3;
 }
 
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 250px;
-    height: 100%;
-    background-color: #2f3136;
-    padding: 20px;
-}
-
-.chat-container {
-    margin-left: 260px;
-    padding: 20px;
+ul {
+    list-style-type: none;
+    padding: 0;
 }
 
 .message {
@@ -68,73 +50,16 @@ button {
 button:hover {
     background-color: darkred;
 }
-body {
-    font-family: Arial, sans-serif;
-    background-color: #36393f;
-    color: #ffffff;
-}
 
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.auth-form {
-    background-color: #2f3136;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-input {
+textarea {
+    width: 100%;
     padding: 10px;
-    margin: 10px 0;
     border-radius: 5px;
     border: none;
-    width: 100%;
+    margin-top: 10px;
 }
 
-button {
-    background-color: #7289da;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    width: 100%;
+#friends-list li {
     cursor: pointer;
-}
-
-button:hover {
-    background-color: #5f73a3;
-}
-
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 250px;
-    height: 100%;
-    background-color: #2f3136;
-    padding: 20px;
-}
-
-.chat-container {
-    margin-left: 260px;
-    padding: 20px;
-}
-
-.message {
-    margin: 10px 0;
-}
-
-button {
-    margin-left: 10px;
-    padding: 5px 10px;
-    background-color: red;
-}
-
-button:hover {
-    background-color: darkred;
+    margin-bottom: 5px;
 }
