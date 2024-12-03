@@ -1,6 +1,6 @@
 // Helper functions to interact with localStorage
 function saveUserData(email, username, password) {
-    const user = { email, username, password };
+    const user = { email, username, password, friends: [] };
     let users = JSON.parse(localStorage.getItem("users")) || [];
     if (users.some(existingUser => existingUser.email === email || existingUser.username === username)) {
         alert("User already exists!");
@@ -25,6 +25,45 @@ function getLoggedInUser() {
 
 function logout() {
     localStorage.removeItem("loggedInUser");
+}
+
+// Function to send a friend request
+function sendFriendRequest(targetUsername) {
+    const loggedInUser = getLoggedInUser();
+    if (!loggedInUser) {
+        alert("You must be logged in to send a friend request.");
+        return;
+    }
+
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const targetUser = users.find(user => user.username === targetUsername);
+    
+    if (targetUser) {
+        if (loggedInUser.username === targetUsername) {
+            alert("You cannot send a friend request to yourself.");
+            return;
+        }
+
+        // Check if the user is already a friend
+        if (loggedInUser.friends.includes(targetUsername)) {
+            alert("You are already friends with this user.");
+            return;
+        }
+
+        // Add to the friend list of both users
+        loggedInUser.friends.push(targetUsername);
+        targetUser.friends.push(loggedInUser.username);
+
+        // Save the updated users to localStorage
+        const updatedUsers = users.map(user => 
+            user.username === loggedInUser.username ? loggedInUser : 
+            user.username === targetUsername ? targetUser : user
+        );
+        localStorage.setItem("users", JSON.stringify(updatedUsers));
+        alert(`Friend request sent to ${targetUsername}!`);
+    } else {
+        alert("User not found.");
+    }
 }
 
 // Sign-up page logic
@@ -65,6 +104,13 @@ document.getElementById("recovery-form")?.addEventListener("submit", function (e
     e.preventDefault();
     const email = document.getElementById("recovery-email").value;
     alert(`Password recovery link sent to ${email}`);
+});
+
+// Add friend page logic
+document.getElementById("add-friend-form")?.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const friendUsername = document.getElementById("friend-username").value;
+    sendFriendRequest(friendUsername);
 });
 
 // Chat page logic
