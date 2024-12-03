@@ -7,22 +7,50 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div class="sidebar">
-            <h2>Servers</h2>
-            <button id="add-server">Add Server</button>
-            <h2>Friends</h2>
-            <button id="add-friend-btn">Add Friend</button>
-            <div class="friends-list"></div>
-            <h2>Pending Requests</h2>
-            <div class="pending-requests"></div>
-        </div>
+    <div id="nav">
+        <button id="login-btn">Login</button>
+        <button id="signup-btn">Sign Up</button>
+        <button id="add-friend-btn">Add Friend</button>
+        <button id="home-btn">Home</button>
+    </div>
 
-        <div class="chat-container">
-            <h2>General Chat</h2>
-            <div id="chat-messages"></div>
-            <textarea id="message-input" placeholder="Type a message..."></textarea>
-            <button id="send-message">Send</button>
+    <div id="login-page" class="page">
+        <h2>Login</h2>
+        <input type="text" id="login-username" placeholder="Username">
+        <input type="password" id="login-password" placeholder="Password">
+        <button id="submit-login">Submit</button>
+    </div>
+
+    <div id="signup-page" class="page">
+        <h2>Sign Up</h2>
+        <input type="text" id="signup-username" placeholder="Username">
+        <input type="password" id="signup-password" placeholder="Password">
+        <button id="submit-signup">Submit</button>
+    </div>
+
+    <div id="add-friend-page" class="page">
+        <h2>Add Friend</h2>
+        <input type="text" id="friend-username" placeholder="Enter friend's username">
+        <button id="send-friend-request">Send Request</button>
+    </div>
+
+    <div id="home-page" class="page">
+        <div class="container">
+            <div class="sidebar">
+                <h2>Servers</h2>
+                <button id="add-server">Add Server</button>
+                <h2>Friends</h2>
+                <div class="friends-list"></div>
+                <h2>Pending Requests</h2>
+                <div class="pending-requests"></div>
+            </div>
+
+            <div class="chat-container">
+                <h2>General Chat</h2>
+                <div id="chat-messages"></div>
+                <textarea id="message-input" placeholder="Type a message..."></textarea>
+                <button id="send-message">Send</button>
+            </div>
         </div>
     </div>
 
