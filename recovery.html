@@ -3,15 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Recovery</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Password Recovery - Discord Clone</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Password Recovery</h1>
-    <form id="recovery-form">
-        <input type="email" id="recovery-email" placeholder="Enter your email" required>
-        <button type="submit">Send Reset Link</button>
-    </form>
-    <p id="status-message"></p>
+    <div class="container">
+        <div class="auth-form">
+            <h1>Recover Your Password</h1>
+            <form id="recovery-form">
+                <input type="email" id="recovery-email" placeholder="Enter your email" required>
+                <button type="submit">Send Reset Link</button>
+            </form>
+            <div>
+                <p>Remembered your password? <a href="login.html" style="color: #99aab5;">Login</a></p>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
