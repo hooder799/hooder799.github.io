@@ -3,26 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Discord Clone</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Login</title>
 </head>
 <body>
-    <div class="container">
-        <div class="auth-form">
-            <h1>Login to Discord</h1>
-            <form id="login-form">
-                <input type="text" id="login-email" placeholder="Email or Username" required>
-                <input type="password" id="login-password" placeholder="Password" required>
-                <button type="submit">Login</button>
-            </form>
-            <div>
-                <a href="signup.html" style="color: #99aab5;">Create an account</a> | 
-                <a href="recovery.html" style="color: #99aab5;">Forgot your password?</a>
-            </div>
-        </div>
-    </div>
+    <h1>Login</h1>
+    <form id="login-form">
+        <input type="text" id="username-email" placeholder="Username or Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+    <button id="register-button">Register</button>
+    <button id="password-recovery-button">Forgot Password?</button>
 
     <script src="script.js"></script>
 </body>
 </html>
-
