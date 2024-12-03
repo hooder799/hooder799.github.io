@@ -145,60 +145,74 @@ function sendMessage(toUsername, messageText) {
     messages.push({ from: loggedInUser.username, text: messageText });
 
     localStorage.setItem(messagesKey, JSON.stringify(messages));
+    displayMessages(toUsername);
 }
 
-// Display friends and their ability to chat
-function displayFriendsAndRequests() {
-    const loggedInUser = getLoggedInUser();
-    if (!loggedInUser) return;
-
-    const users = getUsers();
-    const loggedInUserIndex = users.findIndex(user => user.username === loggedInUser.username);
-
-    // Display friends
-    const friendsListDiv = document.getElementById("friend-list");
-    friendsListDiv.innerHTML = "";
-    loggedInUser.friends.forEach(friend => {
-        const friendDiv = document.createElement("div");
-        friendDiv.textContent = friend;
-        friendDiv.onclick = function() {
-            showChat(friend);
-        };
-        friendsListDiv.appendChild(friendDiv);
-    });
-}
-
-// Show chat box for a particular friend
-function showChat(friendUsername) {
+// Display messages for a selected friend
+function displayMessages(friendUsername) {
     const loggedInUser = getLoggedInUser();
     const messagesKey = `messages_${loggedInUser.username}_${friendUsername}`;
     const messages = JSON.parse(localStorage.getItem(messagesKey)) || [];
 
     const chatBoxDiv = document.getElementById("chat-box");
     chatBoxDiv.innerHTML = "";
-    messages.forEach(message => {
+    messages.forEach((message, index) => {
         const messageDiv = document.createElement("div");
-        messageDiv.textContent = `${message.from}: ${message.text}`;
+        messageDiv.classList.add("message");
+        messageDiv.innerHTML = `
+            <span>${message.from}: ${message.text}</span>
+            <button class="delete-button" onclick="deleteMessage('${friendUsername}', ${index})">Delete</button>
+        `;
         chatBoxDiv.appendChild(messageDiv);
     });
-
-    document.getElementById("send-message-button").onclick = function() {
-        const messageInput = document.getElementById("message-input");
-        const messageText = messageInput.value.trim();
-        if (messageText) {
-            sendMessage(friendUsername, messageText);
-            showChat(friendUsername);
-            messageInput.value = "";
-        }
-    };
 }
 
-// Main Page Logic
+// Delete a specific message from the chat
+function deleteMessage(friendUsername, messageIndex) {
+    const loggedInUser = getLoggedInUser();
+    const messagesKey = `messages_${loggedInUser.username}_${friendUsername}`;
+    const messages = JSON.parse(localStorage.getItem(messagesKey)) || [];
+
+    if (messages.length > messageIndex) {
+        messages.splice(messageIndex, 1);
+        localStorage.setItem(messagesKey, JSON.stringify(messages));
+        displayMessages(friendUsername);
+    }
+}
+
+// Function to display friends and pending requests
+function displayFriendsAndRequests() {
+    const loggedInUser = getLoggedInUser();
+    const users = getUsers();
+
+    // Display friend list
+    const friendListDiv = document.getElementById("friend-list");
+    friendListDiv.innerHTML = "";
+    loggedInUser.friends.forEach(friend => {
+        const friendDiv = document.createElement("div");
+        friendDiv.textContent = friend;
+        friendListDiv.appendChild(friendDiv);
+    });
+
+    // Display pending friend requests
+    const requestListDiv = document.getElementById("friend-request-list");
+    requestListDiv.innerHTML = "";
+    loggedInUser.friendRequests.forEach(request => {
+        const requestDiv = document.createElement("div");
+        requestDiv.innerHTML = `
+            ${request}
+            <button onclick="acceptFriendRequest('${request}')">Accept</button>
+            <button onclick="declineFriendRequest('${request}')">Decline</button>
+        `;
+        requestListDiv.appendChild(requestDiv);
+    });
+}
+
+// Initialize the page
 window.onload = function() {
     const loggedInUser = getLoggedInUser();
     if (!loggedInUser) {
-        window.location.href = "login.html";
+        window.location.href = "login.html"; // Redirect if not logged in
     }
-
     displayFriendsAndRequests();
 };
