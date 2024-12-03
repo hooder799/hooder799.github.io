@@ -147,7 +147,7 @@ function sendMessage(toUsername, messageText) {
     localStorage.setItem(messagesKey, JSON.stringify(messages));
 }
 
-// Display friend requests and friends list
+// Display friends and their ability to chat
 function displayFriendsAndRequests() {
     const loggedInUser = getLoggedInUser();
     if (!loggedInUser) return;
@@ -165,31 +165,6 @@ function displayFriendsAndRequests() {
             showChat(friend);
         };
         friendsListDiv.appendChild(friendDiv);
-    });
-
-    // Display friend requests
-    const friendRequestListDiv = document.getElementById("friend-request-list");
-    friendRequestListDiv.innerHTML = "";
-    loggedInUser.friendRequests.forEach(request => {
-        const requestDiv = document.createElement("div");
-        requestDiv.textContent = request;
-
-        // Create Accept and Decline buttons
-        const acceptButton = document.createElement("button");
-        acceptButton.textContent = "Accept";
-        acceptButton.onclick = function() {
-            acceptFriendRequest(request);
-        };
-
-        const declineButton = document.createElement("button");
-        declineButton.textContent = "Decline";
-        declineButton.onclick = function() {
-            declineFriendRequest(request);
-        };
-
-        requestDiv.appendChild(acceptButton);
-        requestDiv.appendChild(declineButton);
-        friendRequestListDiv.appendChild(requestDiv);
     });
 }
 
