@@ -1,210 +1,28 @@
-window.onload = function () {
-    const loggedInUser = getLoggedInUser();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up - Discord Clone</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-form">
+            <h1>Sign Up for Discord</h1>
+            <form id="signup-form">
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Sign Up</button>
+            </form>
+            <div>
+                <p>Already have an account? <a href="login.html" style="color: #99aab5;">Login</a></p>
+            </div>
+        </div>
+    </div>
 
-    // If the user is logged in, show the chat interface
-    if (loggedInUser) {
-        showChatInterface(loggedInUser);
-    } else {
-        showButtons();
-    }
-};
-
-// Show login and sign-up buttons
-function showButtons() {
-    document.getElementById('buttons-container').style.display = 'block';
-    document.getElementById('login-form').style.display = 'none';
-    document.getElementById('signup-form').style.display = 'none';
-    document.getElementById('chat-interface').style.display = 'none';
-}
-
-// Show login form
-document.getElementById("login-button").addEventListener("click", function () {
-    document.getElementById('buttons-container').style.display = 'none';
-    document.getElementById('login-form').style.display = 'block';
-});
-
-// Show sign-up form
-document.getElementById("sign-up-button").addEventListener("click", function () {
-    document.getElementById('buttons-container').style.display = 'none';
-    document.getElementById('signup-form').style.display = 'block';
-});
-
-// Back to main page (login/signup toggle)
-document.getElementById('back-to-main').addEventListener('click', function () {
-    showButtons();
-});
-
-document.getElementById('back-to-main-signup').addEventListener('click', function () {
-    showButtons();
-});
-
-// Handle login
-document.getElementById("login-submit").addEventListener("click", function () {
-    const emailOrUsername = document.getElementById('username-email').value;
-    const password = document.getElementById('password').value;
-    const user = getUserData(emailOrUsername, password);
-
-    if (user) {
-        storeLoggedInUser(user);
-        showChatInterface(user);
-    } else {
-        alert("Invalid login credentials!");
-    }
-});
-
-// Handle sign up
-document.getElementById("signup-submit").addEventListener("click", function () {
-    const username = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password-signup').value;
-
-    saveUserData(email, username, password);
-    alert("Account created successfully! You can now log in.");
-    showButtons(); // Go back to the main page
-});
-
-// Logout function
-document.getElementById("logout-button")?.addEventListener("click", function () {
-    logout();
-    showButtons();
-});
-
-// Show chat interface
-function showChatInterface(user) {
-    document.getElementById('chat-interface').style.display = 'block';
-    document.getElementById('buttons-container').style.display = 'none';
-    document.getElementById('login-form').style.display = 'none';
-    document.getElementById('signup-form').style.display = 'none';
-
-    document.getElementById('username-display').innerText = user.username;
-    displayFriendsAndRequests(user);
-    displayMessages(user);
-}
-
-// Helper functions to interact with localStorage
-function saveUserData(email, username, password) {
-    const user = { email, username, password, friends: [], sentRequests: [], receivedRequests: [] };
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-    
-    if (users.some(existingUser => existingUser.email === email || existingUser.username === username)) {
-        alert("User already exists!");
-        return;
-    }
-    
-    users.push(user);
-    localStorage.setItem("users", JSON.stringify(users));
-}
-
-function getUserData(emailOrUsername, password) {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    return users.find(user => (user.email === emailOrUsername || user.username === emailOrUsername) && user.password === password);
-}
-
-function storeLoggedInUser(user) {
-    localStorage.setItem("loggedInUser", JSON.stringify(user));
-}
-
-function getLoggedInUser() {
-    return JSON.parse(localStorage.getItem("loggedInUser"));
-}
-
-function logout() {
-    localStorage.removeItem("loggedInUser");
-}
-
-// Display messages in chat
-function displayMessages(user) {
-    const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
-    const chatMessagesDiv = document.getElementById("chat-messages");
-    chatMessagesDiv.innerHTML = "";
-    messages.forEach((message, index) => {
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("message");
-        messageElement.innerHTML = `
-            <span>${message.username}: ${message.text}</span>
-            ${message.username === user.username ? `<button onclick="deleteMessage(${index})">Delete</button>` : ""}
-        `;
-        chatMessagesDiv.appendChild(messageElement);
-    });
-}
-
-// Delete a message
-window.deleteMessage = function (index) {
-    const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
-    messages.splice(index, 1);
-    localStorage.setItem("chatMessages", JSON.stringify(messages));
-    displayMessages(getLoggedInUser());
-};
-
-// Display friends and requests
-function displayFriendsAndRequests(user) {
-    const friendsList = document.getElementById("friends-list");
-    const receivedRequests = document.getElementById("received-requests");
-    const sentRequests = document.getElementById("sent-requests");
-
-    friendsList.innerHTML = "";
-    receivedRequests.innerHTML = "";
-    sentRequests.innerHTML = "";
-
-    // Display friends
-    user.friends.forEach(friend => {
-        const li = document.createElement("li");
-        li.textContent = friend;
-        friendsList.appendChild(li);
-    });
-
-    // Display received friend requests
-    user.receivedRequests.forEach((request, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-            ${request} <button onclick="acceptFriendRequest(${index})">Accept</button> 
-            <button onclick="declineFriendRequest(${index})">Decline</button>
-        `;
-        receivedRequests.appendChild(li);
-    });
-
-    // Display sent friend requests
-    user.sentRequests.forEach((request, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-            ${request} <button onclick="cancelFriendRequest(${index})">Cancel</button>
-        `;
-        sentRequests.appendChild(li);
-    });
-}
-
-// Accept a friend request
-window.acceptFriendRequest = function (index) {
-    const loggedInUser = getLoggedInUser();
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const user = users.find(u => u.username === loggedInUser.username);
-
-    // Accept logic: Add user to friends list
-    const sender = user.receivedRequests[index];
-    user.friends.push(sender);
-    user.receivedRequests.splice(index, 1);
-    localStorage.setItem("users", JSON.stringify(users));
-    displayFriendsAndRequests(user);
-};
-
-// Decline a friend request
-window.declineFriendRequest = function (index) {
-    const loggedInUser = getLoggedInUser();
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const user = users.find(u => u.username === loggedInUser.username);
-
-    user.receivedRequests.splice(index, 1);
-    localStorage.setItem("users", JSON.stringify(users));
-    displayFriendsAndRequests(user);
-};
-
-// Cancel a sent friend request
-window.cancelFriendRequest = function (index) {
-    const loggedInUser = getLoggedInUser();
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const user = users.find(u => u.username === loggedInUser.username);
-
-    user.sentRequests.splice(index, 1);
-    localStorage.setItem("users", JSON.stringify(users));
-    displayFriendsAndRequests(user);
-};
+    <script src="script.js"></script>
+</body>
+</html>
