@@ -44,15 +44,29 @@ function displayMessages() {
   const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
   const chatMessagesDiv = document.getElementById("chat-messages");
   chatMessagesDiv.innerHTML = "";
-  messages.forEach(message => {
+  messages.forEach((message, index) => {
     const messageElement = document.createElement("div");
     messageElement.classList.add("message");
+    
     if (message.image) {
       const imageElement = document.createElement("img");
       imageElement.src = message.image;
-      chatMessagesDiv.appendChild(imageElement);
+      messageElement.appendChild(imageElement);
     }
-    messageElement.textContent = `${message.username}: ${message.text || ""}`;
+    
+    const messageText = document.createElement("span");
+    messageText.textContent = `${message.username}: ${message.text || ""}`;
+    messageElement.appendChild(messageText);
+    
+    // Create a delete button
+    const deleteButton = document.createElement("button");
+    deleteButton.classList.add("delete-button");
+    deleteButton.textContent = "X";
+    deleteButton.addEventListener("click", function () {
+      deleteMessage(index);
+    });
+
+    messageElement.appendChild(deleteButton);
     chatMessagesDiv.appendChild(messageElement);
   });
 }
@@ -132,6 +146,14 @@ function unfriendUser(friendUsername) {
     localStorage.setItem("users", JSON.stringify(users));
     loadFriends(); // Refresh friend list
   }
+}
+
+// Delete message functionality
+function deleteMessage(index) {
+  const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+  messages.splice(index, 1); // Remove the message at the given index
+  localStorage.setItem("chatMessages", JSON.stringify(messages));
+  displayMessages(); // Refresh message display
 }
 
 // Emoji picker functionality
