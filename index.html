@@ -1,33 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Discord Clone - Chat</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Clone - Chat</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="sidebar">
-    <h2>Servers</h2>
-    <button>Add Server</button>
-    <h2>Friends</h2>
-    <div id="friend-list"></div>
-    <button id="add-friend">Add Friend</button>
-  </div>
-  <div class="chat-container">
-    <h2>General Chat</h2>
-    <div id="chat-messages"></div>
-    <textarea id="message-input" placeholder="Type a message..."></textarea>
-    <button id="send-message">Send</button>
-    <!-- Emoji Picker -->
-    <div id="emoji-picker" style="display:none;">
-      <button class="emoji" data-emoji="😊">😊</button>
-      <button class="emoji" data-emoji="😂">😂</button>
-      <button class="emoji" data-emoji="😢">😢</button>
+    <div class="sidebar">
+        <h2>Servers</h2>
+        <button id="create-server-button">Create Server</button>
+        <h2>Friends</h2>
+        <button onclick="addFriend('friendUsername')">Add Friend</button>
+        <button onclick="removeFriend('friendUsername')">Remove Friend</button>
     </div>
-    <input type="file" id="image-input" accept="image/*">
-    <button id="send-image">Send Image</button>
-  </div>
-  <script src="script.js"></script>
+    <div class="chat-container">
+        <h2>General Chat</h2>
+        <div id="chat-messages"></div>
+        <textarea id="message-input" placeholder="Type a message..."></textarea>
+        <button id="send-message">Send</button>
+        <button id="emoji-button">😊</button>
+        <input type="file" id="image-upload" accept="image/*" />
+        <button id="logout-button">Logout</button>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
