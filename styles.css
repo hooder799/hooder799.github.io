@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     height: 100vh;
     margin: 0;
     background-color: #f0f0f0;
@@ -10,102 +10,76 @@ body {
 
 .container {
     display: flex;
+    width: 80%;
+    margin-top: 20px;
 }
 
 .sidebar {
-    width: 200px;
-    padding: 20px;
-    background-color: #292b2f;
+    width: 20%;
+    background-color: #333;
     color: white;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
+    padding: 10px;
+    border-radius: 5px;
 }
 
 .chat-container {
-    flex-grow: 1;
-    padding: 20px;
-    background-color: #e0e0e0;
-    border-radius: 10px;
+    width: 75%;
     margin-left: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 60%;
-    max-width: 600px;
-}
-
-h2 {
-    color: #f44336;
-}
-
-#chat-messages {
-    height: 300px;
-    overflow-y: auto;
-    border: 1px solid #ddd;
     padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    margin-bottom: 10px;
+    background-color: white;
+    border-radius: 5px;
 }
 
-.message {
-    margin-bottom: 10px;
-    font-size: 14px;
-    color: #000;
+button {
+    padding: 5px 10px;
+    margin: 5px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
 
 textarea {
     width: 100%;
-    height: 80px;
-    border: 1px solid #ddd;
     padding: 10px;
+    margin-top: 10px;
     border-radius: 5px;
-    font-size: 14px;
-    resize: none;
-    margin-bottom: 10px;
-}
-
-button {
-    padding: 10px 15px;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #d32f2f;
-}
-
-.header {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+    border: 1px solid #ccc;
 }
 
 .friends-list, .pending-requests {
-    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
-.friend-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px;
+.friend-item, .pending-request-item {
+    background-color: #eaeaea;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
 }
 
-.pending-request-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px;
+.message {
+    background-color: #eaeaea;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
 }
 
-.pending-request-item button {
-    background-color: #4caf50;
-    border: none;
+.delete-message {
+    background-color: red;
     color: white;
-    margin-left: 5px;
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
 }
 
-.pending-request-item button.decline {
-    background-color: #f44336;
+.delete-message:hover {
+    background-color: darkred;
 }
