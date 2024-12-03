@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Add Friend - Discord Clone</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Friend - Discord Clone</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="container">
-    <div class="auth-form">
-        <h1>Add a Friend</h1>
-        <form id="add-friend-form">
-            <input type="text" id="friend-username" placeholder="Enter Username" required>
-            <button type="submit">Add Friend</button>
-        </form>
+    <div class="page">
+        <h2>Add a Friend</h2>
+        <input type="text" id="friend-username" placeholder="Enter Username to Add">
+        <button onclick="sendFriendRequest()">Send Friend Request</button>
+
+        <h3>Pending Requests</h3>
+        <div id="pending-requests">
+            <!-- Pending requests will be listed here -->
+        </div>
     </div>
-</div>
-<script src="script.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>
