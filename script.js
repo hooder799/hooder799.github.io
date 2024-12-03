@@ -8,9 +8,10 @@ function storeLoggedInUser(user) {
 }
 
 // Add Friend functionality
-document.getElementById("add-friend-form")?.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const username = document.getElementById("friend-username").value.trim();
+document.getElementById("add-friend-btn")?.addEventListener("click", function () {
+    const username = prompt("Enter the username of the friend to add:");
+    if (!username) return;
+
     const loggedInUser = getLoggedInUser();
     if (!loggedInUser) {
         alert("Please login first!");
@@ -30,6 +31,56 @@ document.getElementById("add-friend-form")?.addEventListener("submit", function 
     }
 });
 
+// Handle message sending
+document.getElementById("send-message")?.addEventListener("click", function () {
+    const messageInput = document.getElementById("message-input");
+    const messageText = messageInput.value.trim();
+    if (messageText === "") return;
+
+    const loggedInUser = getLoggedInUser();
+    if (!loggedInUser) {
+        alert("Please login first!");
+        return;
+    }
+
+    const newMessage = {
+        username: loggedInUser.username,
+        text: messageText
+    };
+
+    const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+    messages.push(newMessage);
+    localStorage.setItem("chatMessages", JSON.stringify(messages));
+
+    messageInput.value = "";
+    displayMessages(); // Update chat display after sending message
+});
+
+// Display messages in the chat container
+function displayMessages() {
+    const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+    const chatMessagesDiv = document.getElementById("chat-messages");
+    chatMessagesDiv.innerHTML = "";
+
+    messages.forEach((message, index) => {
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message");
+        messageElement.innerHTML = `
+            <span><strong>${message.username}:</strong> ${message.text}</span>
+            <button class="delete-message" onclick="deleteMessage(${index})">Delete</button>
+        `;
+        chatMessagesDiv.appendChild(messageElement);
+    });
+}
+
+// Delete message functionality
+function deleteMessage(messageIndex) {
+    const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+    messages.splice(messageIndex, 1);
+    localStorage.setItem("chatMessages", JSON.stringify(messages));
+    displayMessages(); // Update the chat display after deletion
+}
+
 // Display friends and pending requests
 window.onload = function () {
     const loggedInUser = getLoggedInUser();
@@ -41,6 +92,7 @@ window.onload = function () {
     // Display friends
     const friendsList = document.querySelector(".friends-list");
     friendsList.innerHTML = '';
+    loggedInUser.friends = loggedInUser.friends || [];
     loggedInUser.friends.forEach(friend => {
         const friendItem = document.createElement("div");
         friendItem.classList.add("friend-item");
@@ -55,13 +107,17 @@ window.onload = function () {
         if (request.to === loggedInUser.username && request.status === "pending") {
             const requestItem = document.createElement("div");
             requestItem.classList.add("pending-request-item");
-            requestItem.innerHTML = `${request.from} <button onclick="acceptRequest('${request.from}')">Accept</button><button class="decline" onclick="declineRequest('${request.from}')">Decline</button>`;
+            requestItem.innerHTML = `
+                ${request.from} 
+                <button onclick="acceptRequest('${request.from}')">Accept</button>
+                <button class="decline" onclick="declineRequest('${request.from}')">Decline</button>
+            `;
             pendingRequests.appendChild(requestItem);
         }
     });
 };
 
-// Accept friend request (without refreshing the page)
+// Accept friend request
 function acceptRequest(username) {
     const loggedInUser = getLoggedInUser();
     const requests = JSON.parse(localStorage.getItem("friendRequests")) || [];
@@ -78,7 +134,7 @@ function acceptRequest(username) {
     }
 }
 
-// Decline friend request (without refreshing the page)
+// Decline friend request
 function declineRequest(username) {
     const loggedInUser = getLoggedInUser();
     const requests = JSON.parse(localStorage.getItem("friendRequests")) || [];
@@ -90,11 +146,6 @@ function declineRequest(username) {
         // Dynamically update the UI without refreshing the page
         updatePendingRequests(loggedInUser);
     }
-}
-
-// Start chat with a friend
-function startChat(friendUsername) {
-    alert(`Starting chat with ${friendUsername}`);
 }
 
 // Update friends list dynamically
@@ -118,17 +169,17 @@ function updatePendingRequests(loggedInUser) {
         if (request.to === loggedInUser.username && request.status === "pending") {
             const requestItem = document.createElement("div");
             requestItem.classList.add("pending-request-item");
-            requestItem.innerHTML = `${request.from} <button onclick="acceptRequest('${request.from}')">Accept</button><button class="decline" onclick="declineRequest('${request.from}')">Decline</button>`;
+            requestItem.innerHTML = `
+                ${request.from} 
+                <button onclick="acceptRequest('${request.from}')">Accept</button>
+                <button class="decline" onclick="declineRequest('${request.from}')">Decline</button>
+            `;
             pendingRequests.appendChild(requestItem);
         }
     });
 }
 
-// Signup and Login buttons
-document.getElementById("signup-btn")?.addEventListener("click", function () {
-    window.location.href = "signup.html";
-});
-
-document.getElementById("login-btn")?.addEventListener("click", function () {
-    window.location.href = "login.html";
-});
+// Start chat with a friend
+function startChat(friendUsername) {
+    alert(`Starting chat with ${friendUsername}`);
+}
