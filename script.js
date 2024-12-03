@@ -61,7 +61,7 @@ window.onload = function () {
     });
 };
 
-// Accept friend request
+// Accept friend request (without refreshing the page)
 function acceptRequest(username) {
     const loggedInUser = getLoggedInUser();
     const requests = JSON.parse(localStorage.getItem("friendRequests")) || [];
@@ -71,26 +71,57 @@ function acceptRequest(username) {
         loggedInUser.friends.push(username);
         localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
         localStorage.setItem("friendRequests", JSON.stringify(requests));
-        alert(`You are now friends with ${username}`);
-        window.location.reload();
+
+        // Dynamically update the UI without refreshing the page
+        updateFriendsList(loggedInUser);
+        updatePendingRequests(loggedInUser);
     }
 }
 
-// Decline friend request
+// Decline friend request (without refreshing the page)
 function declineRequest(username) {
+    const loggedInUser = getLoggedInUser();
     const requests = JSON.parse(localStorage.getItem("friendRequests")) || [];
-    const index = requests.findIndex(req => req.from === username && req.status === "pending");
+    const index = requests.findIndex(req => req.from === username && req.to === loggedInUser.username);
     if (index !== -1) {
         requests.splice(index, 1);
         localStorage.setItem("friendRequests", JSON.stringify(requests));
-        alert(`You declined the friend request from ${username}`);
-        window.location.reload();
+
+        // Dynamically update the UI without refreshing the page
+        updatePendingRequests(loggedInUser);
     }
 }
 
 // Start chat with a friend
 function startChat(friendUsername) {
     alert(`Starting chat with ${friendUsername}`);
+}
+
+// Update friends list dynamically
+function updateFriendsList(loggedInUser) {
+    const friendsList = document.querySelector(".friends-list");
+    friendsList.innerHTML = '';
+    loggedInUser.friends.forEach(friend => {
+        const friendItem = document.createElement("div");
+        friendItem.classList.add("friend-item");
+        friendItem.innerHTML = `${friend} <button onclick="startChat('${friend}')">Chat</button>`;
+        friendsList.appendChild(friendItem);
+    });
+}
+
+// Update pending requests dynamically
+function updatePendingRequests(loggedInUser) {
+    const pendingRequests = document.querySelector(".pending-requests");
+    pendingRequests.innerHTML = '';
+    const requests = JSON.parse(localStorage.getItem("friendRequests")) || [];
+    requests.forEach(request => {
+        if (request.to === loggedInUser.username && request.status === "pending") {
+            const requestItem = document.createElement("div");
+            requestItem.classList.add("pending-request-item");
+            requestItem.innerHTML = `${request.from} <button onclick="acceptRequest('${request.from}')">Accept</button><button class="decline" onclick="declineRequest('${request.from}')">Decline</button>`;
+            pendingRequests.appendChild(requestItem);
+        }
+    });
 }
 
 // Signup and Login buttons
