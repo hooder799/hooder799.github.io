@@ -1,37 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discord Clone - Chat</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Clone - Chat</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="header">
-    <button id="signup-btn">Sign Up</button>
-    <button id="login-btn">Login</button>
-</div>
-<div class="container">
-    <div class="sidebar">
-        <h2>Servers</h2>
-        <button>Add Server</button>
-        <h2>Friends</h2>
-        <div class="friends-list">
-            <!-- List of friends will be dynamically generated here -->
+    <div class="container">
+        <div class="sidebar">
+            <h2>Servers</h2>
+            <button id="add-server">Add Server</button>
+            <h2>Friends</h2>
+            <button id="add-friend-btn">Add Friend</button>
+            <div class="friends-list"></div>
+            <h2>Pending Requests</h2>
+            <div class="pending-requests"></div>
         </div>
-        <a href="add-friend.html">Add Friend</a>
-        <h2>Pending Requests</h2>
-        <div class="pending-requests">
-            <!-- Pending friend requests will be displayed here -->
+
+        <div class="chat-container">
+            <h2>General Chat</h2>
+            <div id="chat-messages"></div>
+            <textarea id="message-input" placeholder="Type a message..."></textarea>
+            <button id="send-message">Send</button>
         </div>
     </div>
-    <div class="chat-container">
-        <h2>General Chat</h2>
-        <div id="chat-messages"></div>
-        <textarea id="message-input" placeholder="Type a message..."></textarea>
-        <button id="send-message">Send</button>
-    </div>
-</div>
-<script src="script.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>
