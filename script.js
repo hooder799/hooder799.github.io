@@ -1,190 +1,156 @@
-// Save user data (signup)
+// Helper functions to interact with localStorage
+
 function saveUserData(email, username, password) {
-  const user = { email, username, password, friends: [] };
-  let users = JSON.parse(localStorage.getItem("users")) || [];
-  if (users.some(existingUser => existingUser.email === email || existingUser.username === username)) {
-    alert("User already exists!");
-    return;
-  }
-  users.push(user);
-  localStorage.setItem("users", JSON.stringify(users));
+    const user = { email, username, password };
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    // Check if user already exists
+    if (users.some(existingUser => existingUser.email === email || existingUser.username === username)) {
+        alert("User already exists!");
+        return;
+    }
+    users.push(user);
+    localStorage.setItem("users", JSON.stringify(users));
 }
 
-// Retrieve user data for login
 function getUserData(emailOrUsername, password) {
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-  return users.find(user => (user.email === emailOrUsername || user.username === emailOrUsername) && user.password === password);
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    return users.find(user => (user.email === emailOrUsername || user.username === emailOrUsername) && user.password === password);
 }
 
-// Store logged-in user
 function storeLoggedInUser(user) {
-  localStorage.setItem("loggedInUser", JSON.stringify(user));
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
 }
 
-// Get logged-in user data
 function getLoggedInUser() {
-  return JSON.parse(localStorage.getItem("loggedInUser"));
+    return JSON.parse(localStorage.getItem("loggedInUser"));
 }
 
-// Main Chat Page (index.html) logic
-if (document.getElementById("chat-messages")) {
-  window.onload = function () {
+function logout() {
+    localStorage.removeItem("loggedInUser");
+}
+
+// Add Friend and Remove Friend
+function addFriend(friendUsername) {
     const loggedInUser = getLoggedInUser();
-    if (!loggedInUser) {
-      window.location.href = "login.html"; // Redirect to login page if not logged in
+    if (!loggedInUser) return;
+    
+    let friends = JSON.parse(localStorage.getItem(`friends_${loggedInUser.username}`)) || [];
+    if (!friends.includes(friendUsername)) {
+        friends.push(friendUsername);
+        localStorage.setItem(`friends_${loggedInUser.username}`, JSON.stringify(friends));
+        alert(`${friendUsername} added as a friend!`);
     } else {
-      displayMessages(); // Display messages if the user is logged in
-      loadFriends(); // Load friend list
+        alert(`${friendUsername} is already your friend.`);
     }
-  };
 }
 
-// Display messages in the chat
-function displayMessages() {
-  const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
-  const chatMessagesDiv = document.getElementById("chat-messages");
-  chatMessagesDiv.innerHTML = "";
-  messages.forEach((message, index) => {
-    const messageElement = document.createElement("div");
-    messageElement.classList.add("message");
-    
-    if (message.image) {
-      const imageElement = document.createElement("img");
-      imageElement.src = message.image;
-      messageElement.appendChild(imageElement);
+function removeFriend(friendUsername) {
+    const loggedInUser = getLoggedInUser();
+    if (!loggedInUser) return;
+
+    let friends = JSON.parse(localStorage.getItem(`friends_${loggedInUser.username}`)) || [];
+    friends = friends.filter(friend => friend !== friendUsername);
+    localStorage.setItem(`friends_${loggedInUser.username}`, JSON.stringify(friends));
+    alert(`${friendUsername} removed from your friends.`);
+}
+
+// Sending Emojis and Images
+document.getElementById("emoji-button")?.addEventListener("click", function() {
+    const messageInput = document.getElementById("message-input");
+    messageInput.value += "😊"; // Add emoji to the message
+});
+
+document.getElementById("image-upload")?.addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onloadend = function() {
+            const imageUrl = reader.result;
+            const loggedInUser = getLoggedInUser();
+            const newMessage = {
+                username: loggedInUser.username,
+                text: "Image sent",
+                image: imageUrl
+            };
+            const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+            messages.push(newMessage);
+            localStorage.setItem("chatMessages", JSON.stringify(messages));
+            displayMessages();
+        };
+        reader.readAsDataURL(file);
     }
-    
-    const messageText = document.createElement("span");
-    messageText.textContent = `${message.username}: ${message.text || ""}`;
-    messageElement.appendChild(messageText);
-    
-    // Create a delete button
-    const deleteButton = document.createElement("button");
-    deleteButton.classList.add("delete-button");
-    deleteButton.textContent = "X";
-    deleteButton.addEventListener("click", function () {
-      deleteMessage(index);
-    });
-
-    messageElement.appendChild(deleteButton);
-    chatMessagesDiv.appendChild(messageElement);
-  });
-}
-
-// Send message functionality
-document.getElementById("send-message")?.addEventListener("click", function () {
-  const messageInput = document.getElementById("message-input");
-  const messageText = messageInput.value.trim();
-  if (messageText === "") return;
-
-  const loggedInUser = getLoggedInUser();
-  if (!loggedInUser) {
-    window.location.href = "login.html"; // Redirect if not logged in
-    return;
-  }
-
-  const newMessage = {
-    username: loggedInUser.username,
-    text: messageText
-  };
-
-  const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
-  messages.push(newMessage);
-  localStorage.setItem("chatMessages", JSON.stringify(messages));
-  messageInput.value = "";
-  displayMessages();
 });
 
-// Add Friend functionality
-document.getElementById("add-friend")?.addEventListener("click", function () {
-  const friendUsername = prompt("Enter the username to add:");
-  if (!friendUsername) return;
-
-  const loggedInUser = getLoggedInUser();
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-  const user = users.find(u => u.email === loggedInUser.email);
-
-  if (user && !user.friends.includes(friendUsername)) {
-    user.friends.push(friendUsername);
-    localStorage.setItem("users", JSON.stringify(users));
-    loadFriends();
-  } else {
-    alert("User not found or already a friend.");
-  }
-});
-
-// Load and display friends list
-function loadFriends() {
-  const loggedInUser = getLoggedInUser();
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-  const user = users.find(u => u.email === loggedInUser.email);
-  const friendListDiv = document.getElementById("friend-list");
-
-  if (user && user.friends) {
-    friendListDiv.innerHTML = ""; // Clear the friend list
-    user.friends.forEach(friend => {
-      const friendDiv = document.createElement("div");
-      friendDiv.textContent = friend;
-      const removeButton = document.createElement("button");
-      removeButton.textContent = "Unfriend";
-      removeButton.addEventListener("click", function () {
-        unfriendUser(friend);
-      });
-      friendDiv.appendChild(removeButton);
-      friendListDiv.appendChild(friendDiv);
-    });
-  }
-}
-
-// Remove friend functionality
-function unfriendUser(friendUsername) {
-  const loggedInUser = getLoggedInUser();
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-  const user = users.find(u => u.email === loggedInUser.email);
-  if (user) {
-    user.friends = user.friends.filter(friend => friend !== friendUsername);
-    localStorage.setItem("users", JSON.stringify(users));
-    loadFriends(); // Refresh friend list
-  }
-}
-
-// Delete message functionality
-function deleteMessage(index) {
-  const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
-  messages.splice(index, 1); // Remove the message at the given index
-  localStorage.setItem("chatMessages", JSON.stringify(messages));
-  displayMessages(); // Refresh message display
-}
-
-// Emoji picker functionality
-document.querySelectorAll('.emoji').forEach(button => {
-  button.addEventListener('click', function () {
-    const emoji = button.getAttribute('data-emoji');
-    const messageInput = document.getElementById('message-input');
-    messageInput.value += emoji;
-  });
-});
-
-// Send image functionality
-document.getElementById("send-image")?.addEventListener("click", function () {
-  const fileInput = document.getElementById("image-input");
-  const file = fileInput.files[0];
-
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function () {
-      const imageSrc = reader.result;
-      const loggedInUser = getLoggedInUser();
-      const newMessage = {
+// Send Message
+document.getElementById("send-message")?.addEventListener("click", function() {
+    const messageInput = document.getElementById("message-input");
+    const loggedInUser = getLoggedInUser();
+    const newMessage = {
         username: loggedInUser.username,
-        image: imageSrc
-      };
-
-      const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
-      messages.push(newMessage);
-      localStorage.setItem("chatMessages", JSON.stringify(messages));
-      displayMessages();
+        text: messageInput.value.trim()
     };
-    reader.readAsDataURL(file);
-  }
+    if (!newMessage.text) return;
+    const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+    messages.push(newMessage);
+    localStorage.setItem("chatMessages", JSON.stringify(messages));
+    messageInput.value = "";
+    displayMessages();
 });
+
+function displayMessages() {
+    const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+    const chatMessagesDiv = document.getElementById("chat-messages");
+    chatMessagesDiv.innerHTML = '';
+    messages.forEach(message => {
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("message");
+        messageDiv.innerText = `${message.username}: ${message.text}`;
+        if (message.image) {
+            const img = document.createElement("img");
+            img.src = message.image;
+            img.style.maxWidth = '200px';
+            messageDiv.appendChild(img);
+        }
+        chatMessagesDiv.appendChild(messageDiv);
+    });
+}
+
+window.onload = () => {
+    displayMessages();
+};
+
+// User Authentication Logic
+if (window.location.pathname.includes("login.html")) {
+    document.getElementById("login-form").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+        const user = getUserData(email, password);
+        if (user) {
+            storeLoggedInUser(user);
+            window.location.href = "index.html";
+        } else {
+            alert("Invalid login credentials!");
+        }
+    });
+}
+
+if (window.location.pathname.includes("signup.html")) {
+    document.getElementById("signup-form").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        saveUserData(email, username, password);
+        alert("Signup successful! You can now login.");
+        window.location.href = "login.html";
+    });
+}
+
+if (window.location.pathname.includes("recovery.html")) {
+    document.getElementById("recovery-form").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const email = document.getElementById("recovery-email").value;
+        alert(`Password recovery instructions sent to ${email}`);
+    });
+}
