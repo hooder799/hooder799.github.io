@@ -54,9 +54,10 @@ function sendFriendRequest(receiverUsername) {
 function acceptFriendRequest(requesterUsername) {
     const loggedInUser = getLoggedInUser();
     const users = getUsers();
+    
     const loggedInUserIndex = users.findIndex(user => user.username === loggedInUser.username);
-
     const requester = users.find(user => user.username === requesterUsername);
+
     if (!requester) {
         alert("User not found.");
         return;
@@ -80,15 +81,17 @@ function acceptFriendRequest(requesterUsername) {
 
     saveUsers(users);
     alert("Friend request accepted!");
+    displayFriendsAndRequests();
 }
 
 // Decline a friend request
 function declineFriendRequest(requesterUsername) {
     const loggedInUser = getLoggedInUser();
     const users = getUsers();
-    const loggedInUserIndex = users.findIndex(user => user.username === loggedInUser.username);
 
+    const loggedInUserIndex = users.findIndex(user => user.username === loggedInUser.username);
     const requester = users.find(user => user.username === requesterUsername);
+
     if (!requester) {
         alert("User not found.");
         return;
@@ -102,6 +105,7 @@ function declineFriendRequest(requesterUsername) {
 
     saveUsers(users);
     alert("Friend request declined.");
+    displayFriendsAndRequests();
 }
 
 // Cancel a pending friend request
@@ -169,14 +173,22 @@ function displayFriendsAndRequests() {
     loggedInUser.friendRequests.forEach(request => {
         const requestDiv = document.createElement("div");
         requestDiv.textContent = request;
-        requestDiv.onclick = function() {
-            const action = prompt("Accept or Decline?", "Accept");
-            if (action.toLowerCase() === "accept") {
-                acceptFriendRequest(request);
-            } else if (action.toLowerCase() === "decline") {
-                declineFriendRequest(request);
-            }
+
+        // Create Accept and Decline buttons
+        const acceptButton = document.createElement("button");
+        acceptButton.textContent = "Accept";
+        acceptButton.onclick = function() {
+            acceptFriendRequest(request);
         };
+
+        const declineButton = document.createElement("button");
+        declineButton.textContent = "Decline";
+        declineButton.onclick = function() {
+            declineFriendRequest(request);
+        };
+
+        requestDiv.appendChild(acceptButton);
+        requestDiv.appendChild(declineButton);
         friendRequestListDiv.appendChild(requestDiv);
     });
 }
