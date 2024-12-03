@@ -34,19 +34,19 @@ function logout() {
 window.onload = function () {
     const loggedInUser = getLoggedInUser();
 
-    // If the user is not logged in and tries to access the main page, redirect to login
-    if (!loggedInUser && window.location.pathname !== '/login.html') {
-        window.location.href = 'login.html';
-        return;
-    }
-
-    // If the user is already logged in and tries to access login page, redirect to chat
+    // Ensure the user is not logged in if they try to access login page
     if (loggedInUser && window.location.pathname === '/login.html') {
         window.location.href = 'index.html';
-        return;
+        return; // Stop the script from running further
     }
 
-    // Display initial state (friends and requests)
+    // If the user is not logged in, they should not be able to access main page directly
+    if (!loggedInUser && window.location.pathname !== '/login.html') {
+        window.location.href = 'login.html';
+        return; // Stop the script from running further
+    }
+
+    // If the user is logged in, handle friends, requests, and chat
     if (loggedInUser) {
         displayFriendsAndRequests(loggedInUser);
         displayMessages(loggedInUser);
