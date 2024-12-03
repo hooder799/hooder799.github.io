@@ -1,204 +1,184 @@
-/* Global Styles */
+/* General Body Styles */
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
     flex-direction: column;
 }
 
-/* Sidebar (Left Navigation) */
+/* Sidebar Styles */
 .sidebar {
+    width: 250px;
+    padding: 20px;
     background-color: #2f3136;
     color: white;
-    padding: 20px;
-    position: fixed;
+    border-radius: 10px;
     height: 100%;
-    width: 250px;
+    position: fixed;
     top: 0;
     left: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    bottom: 0;
+    overflow-y: auto;
 }
 
-.sidebar h2, .sidebar h3 {
-    margin-bottom: 20px;
+.sidebar h2, .sidebar h3, .sidebar h4 {
+    color: #7289da;
+    margin-bottom: 10px;
 }
 
-button {
-    background-color: #7289da;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-button:hover {
-    background-color: #5f73a3;
-}
-
-ul {
+/* Friend List and Request Section */
+#friends-list, #sent-requests, #received-requests {
     list-style-type: none;
     padding: 0;
 }
 
 #friends-list li, #sent-requests li, #received-requests li {
-    cursor: pointer;
     margin-bottom: 10px;
-    padding: 8px;
-    background-color: #333;
-    border-radius: 5px;
-}
-
-#friends-list li:hover, #sent-requests li:hover, #received-requests li:hover {
-    background-color: #444;
-}
-
-/* Chat Container (Main Chat Area) */
-.chat-container {
-    margin-left: 260px; /* Space for Sidebar */
-    padding: 20px;
-    width: calc(100% - 260px);
+    font-size: 14px;
+    color: #fff;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+}
+
+button {
+    background-color: #7289da;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #5a6fb1;
+}
+
+/* Decline & Cancel buttons */
+button.decline {
+    background-color: red;
+}
+
+button.decline:hover {
+    background-color: darkred;
+}
+
+button.cancel {
+    background-color: #ff9800;
+}
+
+button.cancel:hover {
+    background-color: #e68900;
+}
+
+/* Chat Section Styles */
+.chat-container {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    margin-left: 270px; /* space for sidebar */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 60%;
+    max-width: 600px;
+    min-width: 300px;
+    margin-top: 30px;
+}
+
+h2 {
+    color: #7289da;
+}
+
+#chat-messages {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.message {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #000;
 }
 
 textarea {
     width: 100%;
+    height: 80px;
+    border: 1px solid #ddd;
     padding: 10px;
     border-radius: 5px;
-    border: none;
-    margin-top: 10px;
-    font-size: 16px;
+    font-size: 14px;
+    resize: none;
+    margin-bottom: 10px;
 }
 
-#chat-messages {
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-}
-
-.message {
-    display: flex;
-    justify-content: space-between;
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #444;
-    border-radius: 5px;
-}
-
-.message button {
-    background-color: red;
+/* Main Button Styles */
+button {
+    padding: 10px 15px;
+    background-color: #7289da;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
-.message button:hover {
-    background-color: darkred;
+button:hover {
+    background-color: #5a6fb1;
 }
 
-/* Form Elements */
-input[type="text"], input[type="password"] {
-    width: 100%;
-    padding: 10px;
+/* Add Friend Button */
+#add-friend-button {
+    background-color: #3ba55c;
     margin-top: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
+#add-friend-button:hover {
+    background-color: #32a252;
 }
 
-/* Mobile Adjustments */
+/* Logout Button */
+#logout-button {
+    background-color: #f04747;
+    margin-top: 10px;
+}
+
+#logout-button:hover {
+    background-color: #d43737;
+}
+
+/* Responsive Layout for Mobile */
 @media screen and (max-width: 768px) {
     .sidebar {
-        width: 200px;
+        width: 100%;
         position: relative;
         height: auto;
-        flex-direction: row;
-        justify-content: flex-start;
         padding: 10px;
-    }
-
-    .sidebar h2, .sidebar h3 {
-        margin-bottom: 10px;
-    }
-
-    .sidebar button {
-        margin-top: 0;
-        width: 100%;
     }
 
     .chat-container {
+        width: 100%;
         margin-left: 0;
-        padding: 10px;
     }
 
     #chat-messages {
-        margin-bottom: 10px;
+        height: 200px;
     }
 
-    .message {
-        flex-direction: column;
-        padding: 8px;
+    .sidebar h2, .sidebar h3, .sidebar h4 {
+        font-size: 16px;
     }
 
-    .message button {
-        margin-top: 5px;
-        padding: 5px;
-    }
-
-    textarea {
-        font-size: 14px;
-    }
-
-    #friends-list, #sent-requests, #received-requests {
-        padding-left: 0;
-    }
-}
-
-/* Very Small Screens (Phones) */
-@media screen and (max-width: 480px) {
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        flex-direction: column;
-    }
-
-    .chat-container {
-        margin-left: 0;
-    }
-
-    .sidebar h2, .sidebar h3 {
-        font-size: 18px;
-    }
-
-    .sidebar button {
-        width: 100%;
-        padding: 12px;
-    }
-
-    textarea {
-        font-size: 14px;
-    }
-
-    .message {
-        padding: 6px;
-    }
-
-    .message button {
-        padding: 3px;
-    }
-
-    .sidebar ul {
-        margin-bottom: 10px;
+    button {
+        font-size: 12px;
+        padding: 6px 10px;
     }
 }
