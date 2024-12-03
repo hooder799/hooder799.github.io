@@ -1,28 +1,26 @@
 /* General Body Styles */
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
     background-color: #f0f0f0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
     flex-direction: column;
 }
 
 /* Sidebar Styles */
 .sidebar {
     width: 250px;
+    height: 100vh;
     padding: 20px;
     background-color: #2f3136;
     color: white;
     border-radius: 10px;
-    height: 100%;
     position: fixed;
     top: 0;
     left: 0;
-    bottom: 0;
-    overflow-y: auto;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar h2, .sidebar h3, .sidebar h4 {
@@ -30,10 +28,26 @@ body {
     margin-bottom: 10px;
 }
 
+.sidebar button {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    background-color: #7289da;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.sidebar button:hover {
+    background-color: #5a6fb1;
+}
+
 /* Friend List and Request Section */
 #friends-list, #sent-requests, #received-requests {
     list-style-type: none;
     padding: 0;
+    margin-top: 20px;
 }
 
 #friends-list li, #sent-requests li, #received-requests li {
@@ -53,6 +67,7 @@ button {
     cursor: pointer;
     margin-left: 5px;
     font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
@@ -78,7 +93,6 @@ button.cancel:hover {
 
 /* Chat Section Styles */
 .chat-container {
-    flex-grow: 1;
     padding: 20px;
     background-color: white;
     border-radius: 10px;
@@ -88,6 +102,10 @@ button.cancel:hover {
     max-width: 600px;
     min-width: 300px;
     margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 80vh;
 }
 
 h2 {
@@ -95,19 +113,22 @@ h2 {
 }
 
 #chat-messages {
-    height: 300px;
+    height: 100%;
     overflow-y: auto;
     border: 1px solid #ddd;
     padding: 10px;
     background-color: #f9f9f9;
     border-radius: 10px;
     margin-bottom: 10px;
+    flex-grow: 1;
 }
 
 .message {
     margin-bottom: 10px;
     font-size: 14px;
     color: #000;
+    display: flex;
+    justify-content: space-between;
 }
 
 textarea {
@@ -119,20 +140,6 @@ textarea {
     font-size: 14px;
     resize: none;
     margin-bottom: 10px;
-}
-
-/* Main Button Styles */
-button {
-    padding: 10px 15px;
-    background-color: #7289da;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #5a6fb1;
 }
 
 /* Add Friend Button */
@@ -155,30 +162,69 @@ button:hover {
     background-color: #d43737;
 }
 
+/* Button Container for Actions */
+button.container {
+    display: flex;
+    gap: 5px;
+}
+
 /* Responsive Layout for Mobile */
 @media screen and (max-width: 768px) {
+    /* Sidebar on Mobile */
     .sidebar {
         width: 100%;
-        position: relative;
         height: auto;
+        position: relative;
+        box-shadow: none;
         padding: 10px;
+        margin-bottom: 20px;
     }
 
+    /* Chat Container on Mobile */
     .chat-container {
         width: 100%;
         margin-left: 0;
+        padding: 10px;
+        min-width: 0;
+        margin-top: 10px;
+        height: auto;
     }
 
     #chat-messages {
-        height: 200px;
+        height: 300px; /* Slightly smaller height on mobile */
+        overflow-y: scroll;
     }
 
-    .sidebar h2, .sidebar h3, .sidebar h4 {
-        font-size: 16px;
+    .message {
+        font-size: 12px; /* Smaller font size on mobile */
+        flex-direction: column;
+        align-items: flex-start;
     }
 
+    /* Adjust Buttons */
     button {
+        padding: 8px 10px;
         font-size: 12px;
-        padding: 6px 10px;
+    }
+
+    .sidebar button {
+        width: auto;
+        padding: 10px;
+    }
+
+    /* Adjust Textarea for Mobile */
+    textarea {
+        height: 60px;
+    }
+
+    /* Make Friend Lists Scrollable */
+    #friends-list, #sent-requests, #received-requests {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    /* Adjust the bottom section for input space */
+    .chat-container {
+        margin-top: 10px;
     }
 }
