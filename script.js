@@ -35,17 +35,16 @@ window.onload = function () {
     const loggedInUser = getLoggedInUser();
     const currentPage = window.location.pathname;
 
-    // Prevent multiple redirects by ensuring we only check the login status once
-    // If the user is logged in, redirect them to index.html if they are on login.html
-    if (loggedInUser && currentPage === '/login.html') {
+    // If user is already logged in and on login page, redirect them to index.html
+    if (loggedInUser && currentPage.includes("login.html")) {
         window.location.href = 'index.html';
-        return; // Stop further script execution after redirect
+        return; // Stop script execution after redirect
     }
 
-    // If the user is not logged in, redirect them to login.html (unless on login page already)
-    if (!loggedInUser && currentPage !== '/login.html') {
+    // If user is not logged in and not on login page, redirect them to login.html
+    if (!loggedInUser && !currentPage.includes("login.html")) {
         window.location.href = 'login.html';
-        return; // Stop further script execution after redirect
+        return; // Stop script execution after redirect
     }
 
     // If the user is logged in, handle display of friends, requests, and messages
