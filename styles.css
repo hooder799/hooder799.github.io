@@ -166,3 +166,32 @@ button:hover {
         width: 80%;
     }
 }
+
+/* styles.css */
+.hidden {
+    display: none;
+}
+
+.success-message {
+    color: green;
+    font-weight: bold;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+}
+
+/* Style for the Add Friend button */
+#add-friend-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#add-friend-button:hover {
+    background-color: #45a049;
+}
