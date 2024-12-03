@@ -4,89 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discord Clone</title>
-    <style>
-        /* Basic styles */
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-
-        #login-form, #signup-form, #chat-interface {
-            display: none;
-        }
-
-        h1, h2, h3 {
-            text-align: center;
-        }
-
-        button {
-            margin: 10px;
-            padding: 10px 20px;
-        }
-
-        input {
-            margin: 10px;
-            padding: 10px;
-            width: 200px;
-        }
-
-        #friends-list, #received-requests, #sent-requests {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .message {
-            margin: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <h1>Welcome to the Discord Clone</h1>
-
-    <!-- Login and Sign Up Buttons -->
-    <div id="buttons-container">
-        <button id="login-button">Login</button>
-        <button id="sign-up-button">Sign Up</button>
-    </div>
-
-    <!-- Login Form -->
-    <div id="login-form">
-        <h2>Login</h2>
-        <input type="text" id="username-email" placeholder="Username or Email" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <button id="login-submit">Login</button>
-        <button id="back-to-main">Back</button>
-    </div>
-
-    <!-- Signup Form -->
-    <div id="signup-form">
-        <h2>Sign Up</h2>
-        <input type="text" id="username" placeholder="Username" required>
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="password" id="password-signup" placeholder="Password" required>
-        <button id="signup-submit">Sign Up</button>
-        <button id="back-to-main-signup">Back</button>
-    </div>
-
-    <!-- Chat Interface (visible only after login) -->
-    <div id="chat-interface">
-        <h2>Welcome, <span id="username-display"></span></h2>
-        <button id="logout-button">Logout</button>
-
-        <div id="friends-and-requests">
-            <h3>Friends</h3>
-            <ul id="friends-list"></ul>
-
-            <h3>Received Requests</h3>
-            <ul id="received-requests"></ul>
-
-            <h3>Sent Requests</h3>
-            <ul id="sent-requests"></ul>
+    <div class="container">
+        <!-- Login / Sign Up Form -->
+        <div class="auth-form" id="authForm">
+            <h1>Welcome to Discord Clone</h1>
+            <input type="text" id="username" placeholder="Enter your username" class="form-input">
+            <input type="password" id="password" placeholder="Enter your password" class="form-input">
+            <button onclick="login()" id="loginBtn">Login</button>
+            <button onclick="signup()" id="signupBtn">Sign Up</button>
         </div>
 
-        <div id="chat-messages">
-            <h3>Messages</h3>
+        <!-- Sidebar & Chat Interface -->
+        <div class="main-container" id="mainContainer" style="display: none;">
+            <div class="sidebar" id="sidebar">
+                <h2>Discord</h2>
+                <button onclick="showFriends()">Friends</button>
+                <button onclick="showRequests()">Requests</button>
+                <button onclick="logout()">Logout</button>
+
+                <!-- Friend Requests Section -->
+                <div id="friendsList" class="section" style="display: none;">
+                    <h3>Friends List</h3>
+                    <ul id="friendsListUl"></ul>
+                </div>
+
+                <div id="receivedRequests" class="section" style="display: none;">
+                    <h3>Received Requests</h3>
+                    <ul id="receivedRequestsUl"></ul>
+                </div>
+
+                <div id="sentRequests" class="section" style="display: none;">
+                    <h3>Sent Requests</h3>
+                    <ul id="sentRequestsUl"></ul>
+                </div>
+            </div>
+
+            <div class="chat-container" id="chatContainer">
+                <h2>Chat</h2>
+                <div id="chatMessages"></div>
+                <textarea id="messageInput" placeholder="Type a message..." rows="3"></textarea>
+                <button onclick="sendMessage()">Send</button>
+            </div>
         </div>
     </div>
 
