@@ -33,20 +33,22 @@ function logout() {
 // Handle login logic
 window.onload = function () {
     const loggedInUser = getLoggedInUser();
+    const currentPage = window.location.pathname;
 
-    // Ensure the user is not logged in if they try to access login page
-    if (loggedInUser && window.location.pathname === '/login.html') {
+    // Prevent multiple redirects by ensuring we only check the login status once
+    // If the user is logged in, redirect them to index.html if they are on login.html
+    if (loggedInUser && currentPage === '/login.html') {
         window.location.href = 'index.html';
-        return; // Stop the script from running further
+        return; // Stop further script execution after redirect
     }
 
-    // If the user is not logged in, they should not be able to access main page directly
-    if (!loggedInUser && window.location.pathname !== '/login.html') {
+    // If the user is not logged in, redirect them to login.html (unless on login page already)
+    if (!loggedInUser && currentPage !== '/login.html') {
         window.location.href = 'login.html';
-        return; // Stop the script from running further
+        return; // Stop further script execution after redirect
     }
 
-    // If the user is logged in, handle friends, requests, and chat
+    // If the user is logged in, handle display of friends, requests, and messages
     if (loggedInUser) {
         displayFriendsAndRequests(loggedInUser);
         displayMessages(loggedInUser);
