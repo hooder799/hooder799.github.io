@@ -1,117 +1,188 @@
-let currentUser = null;
-
-// Fake data for testing purposes
-const users = [
-    { username: 'user1', password: 'password1', friends: ['user2'], sentRequests: [], receivedRequests: [] },
-    { username: 'user2', password: 'password2', friends: ['user1'], sentRequests: [], receivedRequests: [] }
-];
-
-// Login function
-function login() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    // Validate the username and password
-    const user = users.find(u => u.username === username && u.password === password);
-    if (user) {
-        currentUser = user;
-        showMainInterface();
-    } else {
-        alert('Invalid credentials');
+// Helper functions to interact with localStorage
+function saveUserData(email, username, password) {
+    const user = { email, username, password, friends: [], sentRequests: [], receivedRequests: [] };
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    
+    if (users.some(existingUser => existingUser.email === email || existingUser.username === username)) {
+        alert("User already exists!");
+        return;
     }
+    
+    users.push(user);
+    localStorage.setItem("users", JSON.stringify(users));
 }
 
-// Signup function (for simplicity, we simulate it with existing data)
-function signup() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    if (users.some(u => u.username === username)) {
-        alert('Username already exists');
-    } else {
-        users.push({ username, password, friends: [], sentRequests: [], receivedRequests: [] });
-        alert('Account created! Please login.');
-    }
+function getUserData(emailOrUsername, password) {
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    return users.find(user => (user.email === emailOrUsername || user.username === emailOrUsername) && user.password === password);
 }
 
-// Show the main chat interface after login
-function showMainInterface() {
-    document.getElementById('authForm').style.display = 'none';
-    document.getElementById('mainContainer').style.display = 'flex';
-    document.getElementById('sidebar').style.display = 'block';
-    showChat();
+function storeLoggedInUser(user) {
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
 }
 
-// Logout function
+function getLoggedInUser() {
+    return JSON.parse(localStorage.getItem("loggedInUser"));
+}
+
 function logout() {
-    currentUser = null;
-    document.getElementById('authForm').style.display = 'block';
-    document.getElementById('mainContainer').style.display = 'none';
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "login.html";
 }
 
-// Show chat
-function showChat() {
-    document.getElementById('chatContainer').style.display = 'block';
-    document.getElementById('friendsList').style.display = 'none';
-    document.getElementById('receivedRequests').style.display = 'none';
-    document.getElementById('sentRequests').style.display = 'none';
-}
+// Handle login logic
+window.onload = function () {
+    const loggedInUser = getLoggedInUser();
+    const currentPage = window.location.pathname;
 
-// Show Friends List
-function showFriends() {
-    document.getElementById('friendsList').style.display = 'block';
-    document.getElementById('receivedRequests').style.display = 'none';
-    document.getElementById('sentRequests').style.display = 'none';
-    renderFriendsList();
-}
-
-// Show Received Requests
-function showRequests() {
-    document.getElementById('friendsList').style.display = 'none';
-    document.getElementById('receivedRequests').style.display = 'block';
-    document.getElementById('sentRequests').style.display = 'none';
-    renderReceivedRequests();
-}
-
-// Render Friends List
-function renderFriendsList() {
-    const friendsUl = document.getElementById('friendsListUl');
-    friendsUl.innerHTML = '';
-    currentUser.friends.forEach(friend => {
-        const li = document.createElement('li');
-        li.textContent = friend;
-        friendsUl.appendChild(li);
-    });
-}
-
-// Render Received Requests
-function renderReceivedRequests() {
-    const receivedUl = document.getElementById('receivedRequestsUl');
-    receivedUl.innerHTML = '';
-    currentUser.receivedRequests.forEach(request => {
-        const li = document.createElement('li');
-        li.textContent = request;
-        receivedUl.appendChild(li);
-    });
-}
-
-// Send a message
-function sendMessage() {
-    const messageInput = document.getElementById('messageInput');
-    const message = messageInput.value;
-
-    if (message) {
-        const chatMessages = document.getElementById('chatMessages');
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('message');
-        messageElement.innerHTML = `<span>${message}</span><button onclick="deleteMessage(this)">Delete</button>`;
-        chatMessages.appendChild(messageElement);
-        messageInput.value = '';
+    // If user is already logged in and on login page, redirect them to index.html
+    if (loggedInUser && currentPage.includes("login.html")) {
+        window.location.href = 'index.html';
+        return;
     }
-}
 
-// Delete a message
-function deleteMessage(button) {
-    button.parentElement.remove();
-}
+    // If user is not logged in and not on login page, redirect them to login.html
+    if (!loggedInUser && !currentPage.includes("login.html")) {
+        window.location.href = 'login.html';
+        return;
+    }
 
+    // If the user is logged in, handle display of friends, requests, and messages
+    if (loggedInUser) {
+        displayFriendsAndRequests(loggedInUser);
+        displayMessages(loggedInUser);
+
+        // Send message logic
+        document.getElementById("send-message").addEventListener("click", function () {
+            const messageText = document.getElementById("message-input").value.trim();
+            if (messageText) {
+                const loggedInUser = getLoggedInUser();
+                if (loggedInUser) {
+                    const newMessage = {
+                        username: loggedInUser.username,
+                        text: messageText
+                    };
+                    const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+                    messages.push(newMessage);
+                    localStorage.setItem("chatMessages", JSON.stringify(messages));
+                    document.getElementById("message-input").value = "";
+                    displayMessages(loggedInUser);
+                }
+            }
+        });
+    }
+
+    // Display messages in chat
+    function displayMessages(user) {
+        const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+        const chatMessagesDiv = document.getElementById("chat-messages");
+        chatMessagesDiv.innerHTML = "";
+        messages.forEach((message, index) => {
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message");
+            messageElement.innerHTML = `
+                <span>${message.username}: ${message.text}</span>
+                ${message.username === user.username ? `<button onclick="deleteMessage(${index})">Delete</button>` : ""}
+            `;
+            chatMessagesDiv.appendChild(messageElement);
+        });
+    }
+
+    // Delete a message
+    window.deleteMessage = function (index) {
+        const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+        messages.splice(index, 1);
+        localStorage.setItem("chatMessages", JSON.stringify(messages));
+        displayMessages(loggedInUser);
+    };
+
+    // Display friends and requests
+    function displayFriendsAndRequests(user) {
+        const friendsList = document.getElementById("friends-list");
+        const receivedRequests = document.getElementById("received-requests");
+        const sentRequests = document.getElementById("sent-requests");
+
+        friendsList.innerHTML = "";
+        receivedRequests.innerHTML = "";
+        sentRequests.innerHTML = "";
+
+        // Display friends
+        user.friends.forEach(friend => {
+            const li = document.createElement("li");
+            li.textContent = friend;
+            friendsList.appendChild(li);
+        });
+
+        // Display received friend requests
+        user.receivedRequests.forEach((request, index) => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+                ${request} <button onclick="acceptFriendRequest(${index})">Accept</button> 
+                <button onclick="declineFriendRequest(${index})">Decline</button>
+            `;
+            receivedRequests.appendChild(li);
+        });
+
+        // Display sent friend requests
+        user.sentRequests.forEach((request, index) => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+                ${request} <button onclick="cancelFriendRequest(${index})">Cancel</button>
+            `;
+            sentRequests.appendChild(li);
+        });
+    }
+
+    // Accept friend request
+    window.acceptFriendRequest = function (index) {
+        const loggedInUser = getLoggedInUser();
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const senderUsername = loggedInUser.receivedRequests[index];
+        const senderUser = users.find(user => user.username === senderUsername);
+
+        // Add friend
+        if (senderUser) {
+            loggedInUser.friends.push(senderUser.username);
+            senderUser.friends.push(loggedInUser.username);
+            loggedInUser.receivedRequests.splice(index, 1);
+            senderUser.sentRequests = senderUser.sentRequests.filter(request => request !== loggedInUser.username);
+            localStorage.setItem("users", JSON.stringify(users));
+            storeLoggedInUser(loggedInUser);
+            displayFriendsAndRequests(loggedInUser);
+        }
+    };
+
+    // Decline friend request
+    window.declineFriendRequest = function (index) {
+        const loggedInUser = getLoggedInUser();
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const senderUsername = loggedInUser.receivedRequests[index];
+        const senderUser = users.find(user => user.username === senderUsername);
+
+        // Remove request
+        if (senderUser) {
+            loggedInUser.receivedRequests.splice(index, 1);
+            senderUser.sentRequests = senderUser.sentRequests.filter(request => request !== loggedInUser.username);
+            localStorage.setItem("users", JSON.stringify(users));
+            storeLoggedInUser(loggedInUser);
+            displayFriendsAndRequests(loggedInUser);
+        }
+    };
+
+    // Cancel sent friend request
+    window.cancelFriendRequest = function (index) {
+        const loggedInUser = getLoggedInUser();
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const recipientUsername = loggedInUser.sentRequests[index];
+        const recipientUser = users.find(user => user.username === recipientUsername);
+
+        // Remove sent request
+        if (recipientUser) {
+            loggedInUser.sentRequests.splice(index, 1);
+            recipientUser.receivedRequests = recipientUser.receivedRequests.filter(request => request !== loggedInUser.username);
+            localStorage.setItem("users", JSON.stringify(users));
+            storeLoggedInUser(loggedInUser);
+            displayFriendsAndRequests(loggedInUser);
+        }
+    };
+};
