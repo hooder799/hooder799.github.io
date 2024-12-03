@@ -11,7 +11,7 @@
     <h2>Servers</h2>
     <button>Add Server</button>
     <h2>Friends</h2>
-    <div id="friend-list"></div> <!-- Friend list section -->
+    <div id="friend-list"></div>
     <button id="add-friend">Add Friend</button>
   </div>
   <div class="chat-container">
@@ -19,6 +19,14 @@
     <div id="chat-messages"></div>
     <textarea id="message-input" placeholder="Type a message..."></textarea>
     <button id="send-message">Send</button>
+    <!-- Emoji Picker -->
+    <div id="emoji-picker" style="display:none;">
+      <button class="emoji" data-emoji="😊">😊</button>
+      <button class="emoji" data-emoji="😂">😂</button>
+      <button class="emoji" data-emoji="😢">😢</button>
+    </div>
+    <input type="file" id="image-input" accept="image/*">
+    <button id="send-image">Send Image</button>
   </div>
   <script src="script.js"></script>
 </body>
