@@ -28,6 +28,7 @@ function getLoggedInUser() {
 
 function logout() {
     localStorage.removeItem("loggedInUser");
+    window.location.href = "login.html";
 }
 
 document.getElementById("signup-form")?.addEventListener("submit", function (e) {
@@ -48,6 +49,8 @@ window.onload = function () {
             window.location.href = "login.html";
         } else {
             displayMessages();
+            displayFriends();
+            displayPendingRequests();
         }
     }
 
@@ -66,13 +69,16 @@ window.onload = function () {
         }
     });
 
-    // Logout functionality
     document.getElementById("logout-button")?.addEventListener("click", function () {
         logout();
-        window.location.href = "login.html";
+    });
+
+    document.getElementById("add-friend-button")?.addEventListener("click", function () {
+        window.location.href = "add-friend.html";
     });
 };
 
+// Send Message
 document.getElementById("send-message")?.addEventListener("click", function () {
     const messageInput = document.getElementById("message-input");
     const messageText = messageInput.value.trim();
@@ -91,6 +97,7 @@ document.getElementById("send-message")?.addEventListener("click", function () {
     displayMessages();
 });
 
+// Display Messages
 function displayMessages() {
     const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
     const chatMessagesDiv = document.getElementById("chat-messages");
@@ -114,6 +121,7 @@ function displayMessages() {
     });
 }
 
+// Delete Message
 function deleteMessage(messageIndex) {
     const messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
     messages.splice(messageIndex, 1);
@@ -121,10 +129,34 @@ function deleteMessage(messageIndex) {
     displayMessages();
 }
 
-// Add Friend Page Logic
+// Display Friends
+function displayFriends() {
+    const loggedInUser = getLoggedInUser();
+    if (!loggedInUser) return;
+
+    const friendsList = JSON.parse(localStorage.getItem(loggedInUser.username + "_friends")) || [];
+    const friendsListElement = document.getElementById("friends-list");
+    friendsListElement.innerHTML = "";
+
+    friendsList.forEach(friend => {
+        const li = document.createElement("li");
+        li.textContent = friend.username;
+        li.onclick = function () {
+            chatWithFriend(friend.username);
+        };
+        friendsListElement.appendChild(li);
+    });
+}
+
+// Chat with Friend
+function chatWithFriend(friendUsername) {
+    // Here you can implement a function that filters messages for the selected friend
+    alert("Start chatting with " + friendUsername);
+}
+
+// Send Friend Request
 document.getElementById("add-friend-form")?.addEventListener("submit", function (e) {
     e.preventDefault();
-
     const friendInput = document.getElementById("friend-email-or-username").value;
     const loggedInUser = getLoggedInUser();
 
@@ -141,51 +173,52 @@ document.getElementById("add-friend-form")?.addEventListener("submit", function 
         return;
     }
 
-    let friendsList = JSON.parse(localStorage.getItem(loggedInUser.username + "_friends")) || [];
-    
-    if (friendsList.some(f => f.username === friend.username)) {
-        alert("You are already friends with this person.");
+    let sentRequests = JSON.parse(localStorage.getItem(loggedInUser.username + "_sentRequests")) || [];
+    let receivedRequests = JSON.parse(localStorage.getItem(friend.username + "_receivedRequests")) || [];
+
+    if (sentRequests.some(request => request.username === friend.username)) {
+        alert("You have already sent a friend request.");
         return;
     }
 
-    friendsList.push({ username: friend.username, email: friend.email });
-    localStorage.setItem(loggedInUser.username + "_friends", JSON.stringify(friendsList));
+    if (receivedRequests.some(request => request.username === loggedInUser.username)) {
+        alert("You already have a pending friend request.");
+        return;
+    }
 
-    alert("Friend added successfully!");
+    sentRequests.push({ username: friend.username });
+    localStorage.setItem(loggedInUser.username + "_sentRequests", JSON.stringify(sentRequests));
+
+    receivedRequests.push({ username: loggedInUser.username });
+    localStorage.setItem(friend.username + "_receivedRequests", JSON.stringify(receivedRequests));
+
+    alert("Friend request sent!");
     window.location.href = "index.html";
 });
 
-function displayFriends() {
+// Display Pending Friend Requests
+function displayPendingRequests() {
     const loggedInUser = getLoggedInUser();
     if (!loggedInUser) return;
 
-    const friendsList = JSON.parse(localStorage.getItem(loggedInUser.username + "_friends")) || [];
-    const friendsListElement = document.getElementById("friends-list");
-    friendsListElement.innerHTML = "";
+    const sentRequests = JSON.parse(localStorage.getItem(loggedInUser.username + "_sentRequests")) || [];
+    const receivedRequests = JSON.parse(localStorage.getItem(loggedInUser.username + "_receivedRequests")) || [];
 
-    friendsList.forEach(friend => {
+    const sentRequestsList = document.getElementById("sent-requests");
+    const receivedRequestsList = document.getElementById("received-requests");
+
+    sentRequestsList.innerHTML = "";
+    receivedRequestsList.innerHTML = "";
+
+    sentRequests.forEach(request => {
         const li = document.createElement("li");
-        li.textContent = friend.username;
-
-        const unfriendButton = document.createElement("button");
-        unfriendButton.textContent = "Unfriend";
-        unfriendButton.onclick = function () {
-            removeFriend(friend.username);
-        };
-
-        li.appendChild(unfriendButton);
-        friendsListElement.appendChild(li);
+        li.textContent = request.username;
+        sentRequestsList.appendChild(li);
     });
-}
 
-function removeFriend(friendUsername) {
-    const loggedInUser = getLoggedInUser();
-    if (!loggedInUser) return;
-
-    let friendsList = JSON.parse(localStorage.getItem(loggedInUser.username + "_friends")) || [];
-    friendsList = friendsList.filter(friend => friend.username !== friendUsername);
-    localStorage.setItem(loggedInUser.username + "_friends", JSON.stringify(friendsList));
-
-    alert("Friend removed.");
-    displayFriends();
+    receivedRequests.forEach(request => {
+        const li = document.createElement("li");
+        li.textContent = request.username;
+        receivedRequestsList.appendChild(li);
+    });
 }
