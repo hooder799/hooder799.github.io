@@ -15,15 +15,17 @@ body {
 .sidebar {
     width: 200px;
     padding: 20px;
-    background-color: #2f3136;
+    background-color: #292b2f;
     color: white;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 .chat-container {
     flex-grow: 1;
     padding: 20px;
-    background-color: white;
+    background-color: #e0e0e0;
     border-radius: 10px;
     margin-left: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -32,7 +34,7 @@ body {
 }
 
 h2 {
-    color: #7289da;
+    color: #f44336;
 }
 
 #chat-messages {
@@ -64,7 +66,7 @@ textarea {
 
 button {
     padding: 10px 15px;
-    background-color: #7289da;
+    background-color: #f44336;
     color: white;
     border: none;
     border-radius: 5px;
@@ -72,18 +74,38 @@ button {
 }
 
 button:hover {
-    background-color: #5a6fb1;
+    background-color: #d32f2f;
 }
 
-#call-buttons {
-    margin-top: 20px;
+.header {
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }
 
-#call-buttons button {
-    background-color: #43b581;
-    margin-right: 10px;
+.friends-list, .pending-requests {
+    margin-bottom: 20px;
 }
 
-#call-buttons button:hover {
-    background-color: #35a070;
+.friend-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.pending-request-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.pending-request-item button {
+    background-color: #4caf50;
+    border: none;
+    color: white;
+    margin-left: 5px;
+}
+
+.pending-request-item button.decline {
+    background-color: #f44336;
 }
