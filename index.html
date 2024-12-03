@@ -7,51 +7,72 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+    <!-- Navigation Bar -->
     <div id="nav">
-        <button id="login-btn">Login</button>
-        <button id="signup-btn">Sign Up</button>
-        <button id="add-friend-btn">Add Friend</button>
-        <button id="home-btn">Home</button>
+        <button onclick="showPage('home-page')">Home</button>
+        <button onclick="showPage('add-friend-page')">Add Friend</button>
+        <button onclick="showPage('signup-page')">Sign Up</button>
+        <button onclick="showPage('login-page')">Login</button>
+        <button onclick="showPage('recovery-page')">Recovery</button>
     </div>
 
-    <div id="login-page" class="page">
-        <h2>Login</h2>
-        <input type="text" id="login-username" placeholder="Username">
-        <input type="password" id="login-password" placeholder="Password">
-        <button id="submit-login">Submit</button>
-    </div>
-
-    <div id="signup-page" class="page">
-        <h2>Sign Up</h2>
-        <input type="text" id="signup-username" placeholder="Username">
-        <input type="password" id="signup-password" placeholder="Password">
-        <button id="submit-signup">Submit</button>
-    </div>
-
-    <div id="add-friend-page" class="page">
-        <h2>Add Friend</h2>
-        <input type="text" id="friend-username" placeholder="Enter friend's username">
-        <button id="send-friend-request">Send Request</button>
-    </div>
-
+    <!-- Home Page Content -->
     <div id="home-page" class="page">
-        <div class="container">
-            <div class="sidebar">
-                <h2>Servers</h2>
-                <button id="add-server">Add Server</button>
-                <h2>Friends</h2>
-                <div class="friends-list"></div>
-                <h2>Pending Requests</h2>
-                <div class="pending-requests"></div>
-            </div>
-
-            <div class="chat-container">
-                <h2>General Chat</h2>
-                <div id="chat-messages"></div>
-                <textarea id="message-input" placeholder="Type a message..."></textarea>
-                <button id="send-message">Send</button>
+        <div class="sidebar">
+            <h2>Friends</h2>
+            <div class="friends-list" id="friends-list">
+                <!-- Friends will be listed here -->
             </div>
         </div>
+
+        <div class="chat-container">
+            <h2>General Chat</h2>
+            <div id="chat-messages"></div>
+            <textarea id="message-input" placeholder="Type a message..."></textarea>
+            <button id="send-message">Send</button>
+        </div>
+    </div>
+
+    <!-- Add Friend Page Content -->
+    <div id="add-friend-page" class="page">
+        <h2>Add a Friend</h2>
+        <input type="text" id="friend-username" placeholder="Enter Username to Add">
+        <button onclick="sendFriendRequest()">Send Friend Request</button>
+        <div id="pending-requests">
+            <h3>Pending Requests</h3>
+            <!-- Pending requests will be listed here -->
+        </div>
+    </div>
+
+    <!-- Signup Page Content -->
+    <div id="signup-page" class="page">
+        <h2>Sign Up for Discord</h2>
+        <form id="signup-form">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button id="submit-signup" type="submit">Sign Up</button>
+        </form>
+    </div>
+
+    <!-- Login Page Content -->
+    <div id="login-page" class="page">
+        <h2>Login to Discord</h2>
+        <form id="login-form">
+            <input type="text" id="login-email" placeholder="Email or Username" required>
+            <input type="password" id="login-password" placeholder="Password" required>
+            <button id="submit-login" type="submit">Login</button>
+        </form>
+    </div>
+
+    <!-- Password Recovery Page Content -->
+    <div id="recovery-page" class="page">
+        <h2>Recover Your Password</h2>
+        <form id="recovery-form">
+            <input type="email" id="recovery-email" placeholder="Enter your email" required>
+            <button type="submit">Send Reset Link</button>
+        </form>
     </div>
 
     <script src="script.js"></script>
