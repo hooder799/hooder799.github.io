@@ -1,7 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #36393f;
-    color: #fff;
+    background-color: #f7f7f7;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,69 +10,87 @@ body {
 
 .container {
     display: flex;
-    max-width: 1200px;
-    width: 100%;
+    width: 80%;
+    justify-content: space-between;
     padding: 20px;
-    gap: 30px;
-}
-
-.auth-form, .friends-section, .chat-section {
-    background-color: #2f3136;
-    padding: 20px;
+    background-color: #fff;
     border-radius: 8px;
-    width: 100%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.auth-form input, .auth-form button {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-.auth-form button {
-    background-color: #7289da;
-    color: white;
-    cursor: pointer;
-}
-
-.auth-form a {
-    color: #99aab5;
+.friends-section,
+.chat-section {
+    width: 45%;
 }
 
 h2 {
-    color: #b9bbbe;
+    font-size: 18px;
+    color: #444;
 }
 
 #friend-list, #friend-request-list {
-    margin-bottom: 20px;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fafafa;
 }
 
-#chat-box {
-    background-color: #2f3136;
-    padding: 10px;
-    height: 300px;
-    overflow-y: auto;
-    border-radius: 5px;
-    margin-bottom: 10px;
+#friend-list div, #friend-request-list div {
+    margin: 5px 0;
 }
 
 #message-input {
-    width: 80%;
+    width: 75%;
     padding: 10px;
-    margin-right: 10px;
-    border-radius: 5px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    margin-top: 10px;
 }
 
 #send-message-button {
-    padding: 10px;
-    border-radius: 5px;
+    padding: 10px 20px;
     background-color: #7289da;
     color: white;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 14px;
 }
 
-button {
+#send-message-button:hover {
+    background-color: #5b6eae;
+}
+
+#chat-box {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fafafa;
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.message {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.message .delete-button {
+    background-color: red;
+    color: white;
+    padding: 5px;
     border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.message .delete-button:hover {
+    background-color: darkred;
 }
