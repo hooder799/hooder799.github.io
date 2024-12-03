@@ -3,52 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Discord Clone</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Login / Sign Up Form -->
-        <div class="auth-form" id="authForm">
-            <h1>Welcome to Discord Clone</h1>
-            <input type="text" id="username" placeholder="Enter your username" class="form-input">
-            <input type="password" id="password" placeholder="Enter your password" class="form-input">
-            <button onclick="login()" id="loginBtn">Login</button>
-            <button onclick="signup()" id="signupBtn">Sign Up</button>
-        </div>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Welcome</h2>
+        <h3>Friends</h3>
+        <ul id="friends-list"></ul>
 
-        <!-- Sidebar & Chat Interface -->
-        <div class="main-container" id="mainContainer" style="display: none;">
-            <div class="sidebar" id="sidebar">
-                <h2>Discord</h2>
-                <button onclick="showFriends()">Friends</button>
-                <button onclick="showRequests()">Requests</button>
-                <button onclick="logout()">Logout</button>
+        <h3>Friend Requests</h3>
+        <h4>Received Requests</h4>
+        <ul id="received-requests"></ul>
+        <h4>Sent Requests</h4>
+        <ul id="sent-requests"></ul>
 
-                <!-- Friend Requests Section -->
-                <div id="friendsList" class="section" style="display: none;">
-                    <h3>Friends List</h3>
-                    <ul id="friendsListUl"></ul>
-                </div>
+        <button id="logout-button">Logout</button>
+    </div>
 
-                <div id="receivedRequests" class="section" style="display: none;">
-                    <h3>Received Requests</h3>
-                    <ul id="receivedRequestsUl"></ul>
-                </div>
+    <!-- Chat Container -->
+    <div class="chat-container">
+        <div id="chat-messages"></div>
 
-                <div id="sentRequests" class="section" style="display: none;">
-                    <h3>Sent Requests</h3>
-                    <ul id="sentRequestsUl"></ul>
-                </div>
-            </div>
-
-            <div class="chat-container" id="chatContainer">
-                <h2>Chat</h2>
-                <div id="chatMessages"></div>
-                <textarea id="messageInput" placeholder="Type a message..." rows="3"></textarea>
-                <button onclick="sendMessage()">Send</button>
-            </div>
-        </div>
+        <textarea id="message-input" placeholder="Type your message here..."></textarea>
+        <button id="send-message">Send</button>
     </div>
 
     <script src="script.js"></script>
