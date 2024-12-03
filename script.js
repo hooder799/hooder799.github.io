@@ -1,110 +1,85 @@
 // script.js
 
-// Handle Login
-document.getElementById('login-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form submission
+// Show Add Friend button after successful login/signup
+function showAddFriendButton() {
+    const addFriendButton = document.getElementById('add-friend-button');
+    addFriendButton.classList.remove('hidden');
+}
 
-    const emailOrUsername = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-
-    // Validate input
-    if (!emailOrUsername || !password) {
-        alert("Please fill in both fields.");
-        return;
-    }
-
-    // Example of sending data to your backend API
-    fetch('/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ emailOrUsername, password }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Login successful!');
-            // Redirect to the dashboard or home page
-            window.location.href = '/dashboard'; // Change this URL to where you want to redirect
-        } else {
-            alert('Invalid credentials');
-        }
-    })
-    .catch(error => {
-        console.error('Error during login:', error);
-        alert('An error occurred, please try again later.');
-    });
-});
-
-// Handle Signup
+// Handle signup form submission
 document.getElementById('signup-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form submission
+    event.preventDefault(); // Prevent default form submission
 
-    const email = document.getElementById('email').value;
     const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    const messageContainer = document.getElementById('signup-message');
 
-    // Validate input
-    if (!email || !username || !password) {
-        alert("Please fill in all fields.");
+    // Input validation
+    if (!username || !email || !password) {
+        messageContainer.innerHTML = '<p class="error-message">Please fill in all fields.</p>';
         return;
     }
 
-    // Example of sending data to your backend API for signup
+    // Example of sending data to your backend to sign up
     fetch('/signup', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, username, password }),
+        body: JSON.stringify({ username, email, password }),
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Account created successfully!');
-            // Redirect to the login page
-            window.location.href = 'login.html'; // Adjust the redirection URL as necessary
+            messageContainer.innerHTML = '<p class="success-message">signup successful!</p>';
+            showAddFriendButton(); // Show the add friend button
         } else {
-            alert('Signup failed: ' + data.message);
+            messageContainer.innerHTML = `<p class="error-message">${data.message || 'Error: Could not sign up.'}</p>`;
         }
     })
     .catch(error => {
-        console.error('Error during signup:', error);
-        alert('An error occurred, please try again later.');
+        messageContainer.innerHTML = '<p class="error-message">An error occurred during signup. Please try again.</p>';
     });
 });
 
-// Handle Password Recovery
-document.getElementById('recovery-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form submission
+// Handle Login form submission
+document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
 
-    const email = document.getElementById('recovery-email').value;
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    const messageContainer = document.getElementById('login-message');
 
-    // Validate input
-    if (!email) {
-        alert("Please enter your email.");
+    // Input validation
+    if (!email || !password) {
+        messageContainer.innerHTML = '<p class="error-message">Please enter both email and password.</p>';
         return;
     }
 
-    // Example of sending data to your backend API for password recovery
-    fetch('/password-recovery', {
+    // Example of sending data to your backend to log in
+    fetch('/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, password }),
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('A password recovery email has been sent to ' + email);
+            messageContainer.innerHTML = '<p class="success-message">Login successful!</p>';
+            showAddFriendButton(); // Show the add friend button
         } else {
-            alert('Error: ' + data.message);
+            messageContainer.innerHTML = `<p class="error-message">${data.message || 'Error: Could not log in.'}</p>`;
         }
     })
     .catch(error => {
-        console.error('Error during password recovery:', error);
-        alert('An error occurred, please try again later.');
+        messageContainer.innerHTML = '<p class="error-message">An error occurred during login. Please try again.</p>';
     });
+});
+
+// Handle Add Friend button click
+document.getElementById('add-friend-button').addEventListener('click', function() {
+    window.location.href = 'add-friends.html'; // Redirect to the add friends page
 });
