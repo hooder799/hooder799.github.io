@@ -1,36 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Discord Clone</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Clone - Chat</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h2>Welcome</h2>
-        <h3>Friends</h3>
-        <ul id="friends-list"></ul>
-
-        <h3>Friend Requests</h3>
-        <h4>Received Requests</h4>
-        <ul id="received-requests"></ul>
-        <h4>Sent Requests</h4>
-        <ul id="sent-requests"></ul>
-
-        <button id="logout-button">Logout</button>
-    </div>
-
-    <!-- Chat Container -->
-    <div class="chat-container">
-        <div id="chat-messages"></div>
-
-        <textarea id="message-input" placeholder="Type your message here..."></textarea>
-        <button id="send-message">Send</button>
-    </div>
-
-    <script src="script.js"></script>
+  <div class="sidebar">
+    <h2>Servers</h2>
+    <button>Add Server</button>
+    <h2>Friends</h2>
+    <div id="friend-list"></div> <!-- Friend list section -->
+    <button id="add-friend">Add Friend</button>
+  </div>
+  <div class="chat-container">
+    <h2>General Chat</h2>
+    <div id="chat-messages"></div>
+    <textarea id="message-input" placeholder="Type a message..."></textarea>
+    <button id="send-message">Send</button>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
