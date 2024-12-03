@@ -27,6 +27,27 @@ function getLoggedInUser() {
 
 function logout() {
     localStorage.removeItem("loggedInUser");
+    window.location.reload(); // Reload the page to reset
+}
+
+// Show the login form and hide other forms
+function showLoginForm() {
+    document.getElementById("login-form-container").style.display = "block";
+    document.getElementById("signup-form-container").style.display = "none";
+    document.getElementById("auth-form-container").style.display = "block";
+}
+
+// Show the signup form and hide other forms
+function showSignupForm() {
+    document.getElementById("login-form-container").style.display = "none";
+    document.getElementById("signup-form-container").style.display = "block";
+    document.getElementById("auth-form-container").style.display = "block";
+}
+
+// Switch to the chat interface
+function showChatInterface() {
+    document.getElementById("auth-form-container").style.display = "none";
+    document.getElementById("chat-interface").style.display = "block";
 }
 
 // Add Friend and Remove Friend
@@ -115,42 +136,50 @@ function displayMessages() {
     });
 }
 
-window.onload = () => {
-    displayMessages();
-};
-
 // User Authentication Logic
-if (window.location.pathname.includes("login.html")) {
-    document.getElementById("login-form").addEventListener("submit", function(e) {
+if (window.location.pathname.includes("index.html")) {
+    const loggedInUser = getLoggedInUser();
+    if (loggedInUser) {
+        showChatInterface(); // Show chat interface if user is logged in
+    }
+
+    // Show login form when "Login" is clicked
+    document.getElementById("login-option-button").addEventListener("click", showLoginForm);
+
+    // Show signup form when "Sign Up" is clicked
+    document.getElementById("signup-option-button").addEventListener("click", showSignupForm);
+
+    // Login form submission
+    document.getElementById("login-form")?.addEventListener("submit", function(e) {
         e.preventDefault();
         const email = document.getElementById("login-email").value;
         const password = document.getElementById("login-password").value;
         const user = getUserData(email, password);
         if (user) {
             storeLoggedInUser(user);
-            window.location.href = "index.html";
+            showChatInterface();
         } else {
             alert("Invalid login credentials!");
         }
     });
-}
 
-if (window.location.pathname.includes("signup.html")) {
-    document.getElementById("signup-form").addEventListener("submit", function(e) {
+    // Sign up form submission
+    document.getElementById("signup-form")?.addEventListener("submit", function(e) {
         e.preventDefault();
         const email = document.getElementById("email").value;
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
         saveUserData(email, username, password);
         alert("Signup successful! You can now login.");
-        window.location.href = "login.html";
+        showLoginForm();
+    });
+
+    // Logout button
+    document.getElementById("logout-button")?.addEventListener("click", function() {
+        logout();
     });
 }
 
-if (window.location.pathname.includes("recovery.html")) {
-    document.getElementById("recovery-form").addEventListener("submit", function(e) {
-        e.preventDefault();
-        const email = document.getElementById("recovery-email").value;
-        alert(`Password recovery instructions sent to ${email}`);
-    });
-}
+window.onload = () => {
+    displayMessages();
+};
