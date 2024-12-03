@@ -5,15 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discord Clone</title>
     <style>
-        /* Your existing styles here */
+        /* Basic styles */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        #login-form, #signup-form, #chat-interface {
+            display: none;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+        }
+
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+        }
+
+        input {
+            margin: 10px;
+            padding: 10px;
+            width: 200px;
+        }
+
+        #friends-list, #received-requests, #sent-requests {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .message {
+            margin: 10px;
+        }
     </style>
 </head>
 <body>
+
     <h1>Welcome to the Discord Clone</h1>
-    
-    <!-- Buttons for login and sign up -->
-    <button id="login-button">Login</button>
-    <button id="sign-up-button">Sign Up</button>
+
+    <!-- Login and Sign Up Buttons -->
+    <div id="buttons-container">
+        <button id="login-button">Login</button>
+        <button id="sign-up-button">Sign Up</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="login-form">
+        <h2>Login</h2>
+        <input type="text" id="username-email" placeholder="Username or Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button id="login-submit">Login</button>
+        <button id="back-to-main">Back</button>
+    </div>
+
+    <!-- Signup Form -->
+    <div id="signup-form">
+        <h2>Sign Up</h2>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password-signup" placeholder="Password" required>
+        <button id="signup-submit">Sign Up</button>
+        <button id="back-to-main-signup">Back</button>
+    </div>
+
+    <!-- Chat Interface (visible only after login) -->
+    <div id="chat-interface">
+        <h2>Welcome, <span id="username-display"></span></h2>
+        <button id="logout-button">Logout</button>
+
+        <div id="friends-and-requests">
+            <h3>Friends</h3>
+            <ul id="friends-list"></ul>
+
+            <h3>Received Requests</h3>
+            <ul id="received-requests"></ul>
+
+            <h3>Sent Requests</h3>
+            <ul id="sent-requests"></ul>
+        </div>
+
+        <div id="chat-messages">
+            <h3>Messages</h3>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
