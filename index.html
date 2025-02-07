@@ -3,44 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Discord Clone</title>
+    <title>OpenVPN Project</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="app">
-        <div id="login">
-            <h2>Login</h2>
-            <input type="text" id="loginUsername" placeholder="Enter Username">
-            <input type="password" id="loginPassword" placeholder="Enter Password">
-            <button id="loginBtn">Login</button>
-            <button id="showSignupBtn">Go to Signup</button>
-            <button id="showResetBtn">Reset Password</button>
-        </div>
-        
-        <div id="signup" style="display:none;">
-            <h2>Signup</h2>
-            <input type="text" id="signupUsername" placeholder="Enter Username">
-            <input type="password" id="signupPassword" placeholder="Enter Password">
-            <button id="signupBtn">Signup</button>
-            <button id="backToLogin">Back to Login</button>
-        </div>
-
-        <div id="resetPassword" style="display:none;">
-            <h2>Reset Password</h2>
-            <input type="text" id="resetUsername" placeholder="Enter Username">
-            <input type="password" id="newPassword" placeholder="Enter New Password">
-            <button id="resetBtn">Reset Password</button>
-            <button id="backToLoginFromReset">Back to Login</button>
-        </div>
-
-        <div id="chat" style="display:none;">
-            <div id="messages"></div>
-            <input type="text" id="messageInput" placeholder="Type a message">
-            <button id="sendBtn">Send</button>
-        </div>
-    </div>
-
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="app.js"></script>
+    <header>
+        <h1>Welcome to the OpenVPN Project</h1>
+        <p>Your description and instructions about the OpenVPN setup.</p>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#usage">Usage</a></li>
+            <li><a href="#license">License</a></li>
+        </ul>
+    </nav>
+    <section id="installation">
+        <h2>Installation Instructions</h2>
+        <p>Provide details on how to set up OpenVPN.</p>
+    </section>
+    <section id="usage">
+        <h2>How to Use</h2>
+        <p>Instructions on how users can connect to your VPN.</p>
+    </section>
+    <section id="license">
+        <h2>License</h2>
+        <p>Information about the project's license.</p>
+    </section>
+    <footer>
+        <p>&copy; 2023 Your Name</p>
+    </footer>
 </body>
 </html>
