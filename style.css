@@ -1,55 +1,35 @@
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(45deg, #ff0000, #ff4d00);
-    color: white;
+    margin: 0;
     padding: 20px;
+    background-color: #f4f4f4;
 }
 
-#app {
-    max-width: 600px;
-    margin: auto;
-    border: 1px solid #fff;
-    border-radius: 10px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-h2 {
+header {
+    background: #35424a;
+    color: #ffffff;
+    padding: 20px 0;
     text-align: center;
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: none;
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+section {
+    margin: 20px 0;
+    padding: 20px;
+    background: #ffffff;
     border-radius: 5px;
 }
 
-button {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    background-color: white;
-    color: black;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#messages {
-    height: 400px;
-    overflow-y: auto;
-    border: 1px solid #fff;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-#messageInput {
-    width: 80%;
-}
-
-#sendBtn {
-    width: 18%;
+footer {
+    text-align: center;
+    margin-top: 20px;
 }
