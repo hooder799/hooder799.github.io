@@ -3,15 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Macro</title>
+    <title>Advanced Web Macro Tool</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Web Macro Tool</h1>
+        <h1>Advanced Web Macro Tool</h1>
         <p>Press <strong>Ctrl + M</strong> to toggle the macro on and off.</p>
         <p id="status">Macro is <span id="macro-status">OFF</span></p>
         <button id="perform-action">Perform Action</button>
+        <button id="clear-actions">Clear Actions</button>
+        <div>
+            <h2>Actions</h2>
+            <textarea id="actions-input" rows="5" placeholder="Define actions in the format: {command: 'perform', type: 'alert', message: 'Hello World!'}"></textarea>
+            <button id="add-action">Add Action</button>
+        </div>
+        <ul id="action-list"></ul>
     </div>
     <script src="script.js"></script>
 </body>
