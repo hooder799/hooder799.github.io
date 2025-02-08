@@ -3,44 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Web Macro Tool</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>SPLoom.io AutoPlace Macro</title>
+    <script>
+        let healInterval = 4; // Heal every 4 milliseconds
+        let isHealing = false;
+
+        function sendCommand(command) {
+            // Dispatch keyboard events for commands
+            document.dispatchEvent(new KeyboardEvent('keydown', {
+                key: command,
+                code: `Key${command.toUpperCase()}`,
+                char: command,
+                keyCode: command.charCodeAt(0), // Character code
+                which: command.charCodeAt(0),
+                bubbles: true
+            }));
+        }
+
+        function setupMacro() {
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'f') { // Place Trap
+                    sendCommand('f');
+                } else if (event.key === 'r') { // Place Spike
+                    sendCommand('r');
+                } else if (event.key === 'q') { // Heal
+                    if (!isHealing) {
+                        isHealing = true;
+                        setInterval(() => {
+                            sendCommand('q');
+                        }, healInterval);
+                    }
+                }
+            });
+        }
+
+        // Run setup on window load
+        window.onload = setupMacro;
+    </script>
 </head>
 <body>
-    <div class="container">
-        <h1>Advanced Web Macro Tool</h1>
-        <p>
-            Press the key to toggle the macro on and off: 
-            <input id="macro-key" type="text" value="m" maxlength="1" style="width: 30px;"/>
-            <select id="activation-method">
-                <option value="toggle">Click to Activate</option>
-                <option value="hold">Hold to Activate</option>
-            </select>
-        </p>
-        <p id="status">Macro is <span id="macro-status">OFF</span></p>
-        <button id="perform-action">Perform Action</button>
-        <button id="clear-actions">Clear Actions</button>
-        <div>
-            <h2>Actions</h2>
-            <textarea id="actions-input" rows="5">{"type": "alert", "message": "Hello World!"}</textarea>
-            <button id="add-action">Add Action</button>
-        </div>
-        <div>
-            <h2>Action Speed</h2>
-            <input id="speed-input" type="number" value="1" min="1" placeholder="Speed" />
-            <select id="speed-unit">
-                <option value="seconds">Seconds</option>
-                <option value="milliseconds">Milliseconds</option>
-                <option value="minutes">Minutes</option>
-                <option value="hours">Hours</option>
-            </select>
-        </div>
-        <div>
-            <h2>Repeat Count</h2>
-            <input id="repeat-count" type="number" value="1" min="1" placeholder="Repeat Count" />
-        </div>
-        <ul id="action-list"></ul>
-    </div>
-    <script src="script.js"></script>
+    <h1>SPLoom.io AutoPlace Macro</h1>
+    <p>Instructions:</p>
+    <ul>
+        <li>Press <strong>F</strong> to place a trap.</li>
+        <li>Press <strong>R</strong> to place a spike.</li>
+        <li>Press <strong>Q</strong> to heal (heals every 4 milliseconds).</li>
+    </ul>
+    <p>This page must be active for the macro to work.</p>
 </body>
 </html>
