@@ -25,6 +25,7 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 button:hover {
@@ -34,4 +35,15 @@ button:hover {
 #status {
     margin-top: 20px;
     font-weight: bold;
+}
+
+textarea {
+    width: 100%;
+    margin-top: 10px;
+}
+
+ul {
+    margin-top: 10px;
+    list-style-type: none;
+    padding: 0;
 }
