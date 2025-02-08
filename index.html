@@ -9,14 +9,35 @@
 <body>
     <div class="container">
         <h1>Advanced Web Macro Tool</h1>
-        <p>Press <strong>Ctrl + M</strong> to toggle the macro on and off.</p>
+        <p>
+            Press the key to toggle the macro on and off: 
+            <input id="macro-key" type="text" value="m" maxlength="1" style="width: 30px;"/>
+            <select id="activation-method">
+                <option value="toggle">Click to Activate</option>
+                <option value="hold">Hold to Activate</option>
+            </select>
+        </p>
         <p id="status">Macro is <span id="macro-status">OFF</span></p>
         <button id="perform-action">Perform Action</button>
         <button id="clear-actions">Clear Actions</button>
         <div>
             <h2>Actions</h2>
-            <textarea id="actions-input" rows="5" placeholder="Define actions in the format: {command: 'perform', type: 'alert', message: 'Hello World!'}"></textarea>
+            <textarea id="actions-input" rows="5">{"type": "alert", "message": "Hello World!"}</textarea>
             <button id="add-action">Add Action</button>
+        </div>
+        <div>
+            <h2>Action Speed</h2>
+            <input id="speed-input" type="number" value="1" min="1" placeholder="Speed" />
+            <select id="speed-unit">
+                <option value="seconds">Seconds</option>
+                <option value="milliseconds">Milliseconds</option>
+                <option value="minutes">Minutes</option>
+                <option value="hours">Hours</option>
+            </select>
+        </div>
+        <div>
+            <h2>Repeat Count</h2>
+            <input id="repeat-count" type="number" value="1" min="1" placeholder="Repeat Count" />
         </div>
         <ul id="action-list"></ul>
     </div>
