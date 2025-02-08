@@ -1,11 +1,26 @@
 let macroEnabled = false;
+let actionQueue = [];
 
-// Function to perform the action (simulate a click or input)
-function performAction() {
+// Function to perform an action based on the command
+function performAction(action) {
     if (macroEnabled) {
-        console.log("Macro action performed!");
-        // Here you can replace this with actual actions
-        alert("Action performed by the macro!");
+        switch (action.type) {
+            case 'alert':
+                alert(action.message);
+                break;
+            case 'log':
+                console.log(action.message);
+                break;
+            default:
+                console.error('Unknown action type');
+        }
+    }
+}
+
+// Execute all queued actions
+function executeActions() {
+    if (macroEnabled) {
+        actionQueue.forEach(action => performAction(action));
     }
 }
 
@@ -15,17 +30,31 @@ function toggleMacro() {
     document.getElementById("macro-status").textContent = macroEnabled ? "ON" : "OFF";
 }
 
-// Listen for keydown events
+// Listen for keydown events for macro control
 window.addEventListener('keydown', (event) => {
     if (event.ctrlKey && event.key === 'm') {  // CTRL + M
         toggleMacro();
     }
 });
 
-// Set an interval to run the macro action periodically
-setInterval(() => {
-    performAction();
-}, 5000); // Perform action every 5 seconds (change as needed)
+// Event listener for button to perform the action
+document.getElementById("perform-action").addEventListener('click', executeActions);
 
-// Event listener for the button
-document.getElementById("perform-action").addEventListener('click', performAction);
+// Add action to the queue based on user input
+document.getElementById("add-action").addEventListener('click', () => {
+    const input = document.getElementById("actions-input").value;
+    try {
+        const action = JSON.parse(input);
+        actionQueue.push(action);
+        document.getElementById("action-list").innerHTML += `<li>${JSON.stringify(action)}</li>`;
+        document.getElementById("actions-input").value = ''; // Clear input
+    } catch (error) {
+        alert("Invalid action format. Make sure to use JSON format.");
+    }
+});
+
+// Clear all actions from the queue
+document.getElementById("clear-actions").addEventListener('click', () => {
+    actionQueue = [];
+    document.getElementById("action-list").innerHTML = ''; // Clear displayed actions
+});
