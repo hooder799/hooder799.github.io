@@ -1,34 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Web-Based VPN Client</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Macro</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Web-Based VPN Client</h1>
-  <form id="vpn-form">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username"><br><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password"><br><br>
-    <label for="server">Server:</label>
-    <input type="text" id="server" name="server"><br><br>
-    <button id="connect-button">Connect</button>
-  </form>
-
-  <script src="https://cdn.jsdelivr.net/npm/webvpn@latest/dist/webvpn.min.js"></script>
-  <script>
-    // Initialize WebVPN
-    const vpn = new WebVPN({
-      container: document.getElementById('vpn-form'),
-      username: document.getElementById('username'),
-      password: document.getElementById('password'),
-      server: document.getElementById('server')
-    });
-
-    // Connect button click event handler
-    document.getElementById('connect-button').addEventListener('click', () => {
-      vpn.connect();
-    });
-  </script>
+    <div class="container">
+        <h1>Web Macro Tool</h1>
+        <p>Press <strong>Ctrl + M</strong> to toggle the macro on and off.</p>
+        <p id="status">Macro is <span id="macro-status">OFF</span></p>
+        <button id="perform-action">Perform Action</button>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
